@@ -1,4 +1,4 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+# Pizzeria
 
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
@@ -16,6 +16,7 @@ O cerință nu se consideră îndeplinită dacă este realizată doar ca o serie
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
 - [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
+- [ ] Pizzeria va ajuta restaurantul cu comenzile
 
 ## Tema 1
 
