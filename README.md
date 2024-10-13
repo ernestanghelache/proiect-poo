@@ -16,7 +16,7 @@ O cerință nu se consideră îndeplinită dacă este realizată doar ca o serie
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
 - [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
-- [ ] Pizzeria va ajuta restaurantul cu comenzile
+Pizzeria va ajuta restaurantul cu comenzile
 
 ## Tema 1
 
