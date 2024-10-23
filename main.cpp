@@ -1,57 +1,126 @@
 #include <iostream>
-#include <array>
 
-#include <Helper.h>
+class Ingredient {
+    std::string numeIngredient;
+    std::string cantitate;
+public:
+    Ingredient() : numeIngredient{}, cantitate{} {}
+    Ingredient(std::string& numeIngredient_, std::string& cantitate_) : numeIngredient{std::move(numeIngredient_)}, cantitate{move(cantitate_)}{}
+    Ingredient(Ingredient& other) : numeIngredient{std::move(other.numeIngredient)}, cantitate{std::move(other.cantitate)}{}
+    Ingredient& operator=(const Ingredient& other) {
+        if (this == &other) {
+            return *this;
+        }
+        numeIngredient = other.numeIngredient;
+        cantitate = other.cantitate;
+        return *this;
+    }
+    std::string getNumeIngredient() {return numeIngredient;}
+    std::string getCantitate() {return cantitate;}
+    ~Ingredient() {}
+};
+class Instructiune {
+    std::string pas;
+public:
+    Instructiune() : pas{} {}
+    explicit Instructiune(std::string& pas_) : pas{std::move(pas_)}{}
+    Instructiune(Instructiune& other) : pas{std::move(other.pas)}{}
+    Instructiune& operator=(const Instructiune& other) {
+        if (this == &other) {
+            return *this;
+        }
+        pas = other.pas;
+        return *this;
+    }
+
+    std::string getPas() {return pas;}
+    ~Instructiune() {}
+};
+class Reteta {
+    std::string numeReteta;
+    int nrIng = 0;
+    int nrIns = 0;
+    Ingredient ingr[10];
+    Instructiune instr[10];
+public:
+    Reteta() : numeReteta{}, nrIng{}, nrIns{}, ingr{}, instr{} {}
+    explicit Reteta(std::string numeReteta_): numeReteta{std::move(numeReteta_)}{}
+    Reteta(std::string& numeReteta_, int nrIng_, int nrIns_,
+           Ingredient ingr_[], Instructiune instr_[])
+        : numeReteta{std::move(numeReteta_)}, nrIng{nrIng_}, nrIns{nrIns_} {
+        for (int i = 0; i < nrIng_ && i < 10; i++) {
+            ingr[i] = ingr_[i];
+        }
+        for (int i = 0; i < nrIns_ && i < 10; i++) {
+            instr[i] = instr_[i];
+        }
+    }
+    Reteta(const Reteta& other) {
+        numeReteta = other.numeReteta;
+        nrIng = other.nrIng;
+        nrIns = other.nrIns;
+        for (int i = 0; i < other.nrIng; i++) {
+            ingr[i] = other.ingr[i];
+        }
+        for (int i = 0; i < other.nrIns; i++) {
+            instr[i] = other.instr[i];
+        }
+    }
+    Reteta& operator=(const Reteta& other) {
+        if (this == &other) {
+            return *this;
+        }
+        numeReteta = other.numeReteta;
+        nrIng = other.nrIng;
+        nrIns = other.nrIns;
+        for (int i = 0; i < other.nrIng; i++) {
+            ingr[i] = other.ingr[i];
+        }
+        for (int i = 0; i < other.nrIns; i++) {
+            instr[i] = other.instr[i];
+        }
+        return *this;
+    }
+
+    void addIngredient(std::string num, std::string can) {
+        if (nrIng < 10) {
+            ingr[nrIng]=Ingredient{num, can};
+            nrIng++;
+            std::cout << "Ingredient adaugat.\n";
+        } else {
+            std::cout << "Nu se mai pot adauga ingrediente la aceasta reteta.\n";
+        }
+    }
+
+    void addInstructiune(std::string instruct) {
+        if (nrIns < 10) {
+            instr[nrIns]=Instructiune{instruct};
+            nrIns++;
+            std::cout << "Instructiune adaugata.\n";
+        } else {
+            std::cout << "Nu se mai pot adauga instructiuni la aceasta reteta.\n";
+        }
+    }
+    void afisReteta()
+    {
+        std::cout << "Nume reteta: " << numeReteta << '\n';
+        std::cout << "Ingrediente:" << '\n';
+        for (int i = 0; i < nrIng; i++) {
+            std::cout << "- " << ingr[i].getCantitate() << ": " << ingr[i].getNumeIngredient() << '\n';
+        }
+        std::cout << "Instructiuni:\n";
+        for (int i = 0; i < nrIns; i++) {
+            std::cout << instr[i].getPas() << '\n';
+        }
+    }
+    ~Reteta() {}
+};
 
 int main() {
-    std::cout << "Hello, world!\n";
-    std::array<int, 100> v{};
-    int nr;
-    std::cout << "Introduceți nr: ";
-    /////////////////////////////////////////////////////////////////////////
-    /// Observație: dacă aveți nevoie să citiți date de intrare de la tastatură,
-    /// dați exemple de date de intrare folosind fișierul tastatura.txt
-    /// Trebuie să aveți în fișierul tastatura.txt suficiente date de intrare
-    /// (în formatul impus de voi) astfel încât execuția programului să se încheie.
-    /// De asemenea, trebuie să adăugați în acest fișier date de intrare
-    /// pentru cât mai multe ramuri de execuție.
-    /// Dorim să facem acest lucru pentru a automatiza testarea codului, fără să
-    /// mai pierdem timp de fiecare dată să introducem de la zero aceleași date de intrare.
-    ///
-    /// Pe GitHub Actions (bife), fișierul tastatura.txt este folosit
-    /// pentru a simula date introduse de la tastatură.
-    /// Bifele verifică dacă programul are erori de compilare, erori de memorie și memory leaks.
-    ///
-    /// Dacă nu puneți în tastatura.txt suficiente date de intrare, îmi rezerv dreptul să vă
-    /// testez codul cu ce date de intrare am chef și să nu pun notă dacă găsesc vreun bug.
-    /// Impun această cerință ca să învățați să faceți un demo și să arătați părțile din
-    /// program care merg (și să le evitați pe cele care nu merg).
-    ///
-    /////////////////////////////////////////////////////////////////////////
-    std::cin >> nr;
-    /////////////////////////////////////////////////////////////////////////
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "v[" << i << "] = ";
-        std::cin >> v[i];
-    }
-    std::cout << "\n\n";
-    std::cout << "Am citit de la tastatură " << nr << " elemente:\n";
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "- " << v[i] << "\n";
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    /// Pentru date citite din fișier, NU folosiți tastatura.txt. Creați-vă voi
-    /// alt fișier propriu cu ce alt nume doriți.
-    /// Exemplu:
-    /// std::ifstream fis("date.txt");
-    /// for(int i = 0; i < nr2; ++i)
-    ///     fis >> v2[i];
-    ///
-    ///////////////////////////////////////////////////////////////////////////
-    ///                Exemplu de utilizare cod generat                     ///
-    ///////////////////////////////////////////////////////////////////////////
-    Helper helper;
-    helper.help();
-    ///////////////////////////////////////////////////////////////////////////
+    Reteta clati("clatite");
+    clati.addIngredient("Faina","500g");
+    clati.addInstructiune("lzlz");
+
     return 0;
 }
+
