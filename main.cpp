@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 class Ingredient {
     std::string numeIngredient;
     std::string cantitate;
@@ -194,9 +195,59 @@ int main() {
             }
 
             case 2: {
+                std::cout << retetar;
+                std::string num;
+                std::cout << "Introduceti numele retetei pe care doriti sa o modificati: ";
+                std::getline(std::cin, num);  // Citește întregul nume
 
+                Reteta* ret = retetar.gasesteReteta(num);
+
+                if (ret == nullptr) {
+                    std::cout << "Reteta nu a fost gasita.\n";
+                } else {
+                    int c;
+                    std::cout << "Ce doriti sa modificati?\n";
+                    std::cout << "1. Adaugati ingrediente.\n";
+                    std::cout << "2. Adaugati instructiuni.\n";
+                    std::cin >> c;
+                    std::cin.ignore();
+
+                    if (c == 1) {
+                        int nr;
+                        std::cout << "Cate ingrediente doriti sa adaugati? ";
+                        std::cin >> nr;
+                        std::cin.ignore();
+
+                        for (int i = 0; i < nr; ++i) {
+                            std::string in, can;
+                            std::cout << "Introduceti numele ingredientului " << i + 1 << ": ";
+                            std::getline(std::cin, in);
+                            std::cout << "Introduceti cantitatea pentru " << in << ": ";
+                            std::getline(std::cin, can);
+
+                            ret->addIngredient(in, can);
+                        }
+
+                    } else if (c == 2) {
+                        int nrIn;
+                        std::cout << "Cate instructiuni doriti sa adaugati? ";
+                        std::cin >> nrIn;
+                        std::cin.ignore();
+
+                        for (int i = 0; i < nrIn; ++i) {
+                            std::string instructiune;
+                            std::cout << "Introduceti instructiunea " << i + 1 << ": ";
+                            std::getline(std::cin, instructiune);
+
+                            ret->addInstructiune(instructiune);
+                        }
+                    } else {
+                        std::cout << "Optiune invalida.\n";
+                    }
+                }
                 break;
             }
+
 
             case 3: {
                 std::cout<<retetar;
