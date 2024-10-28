@@ -17,8 +17,8 @@ public:
         cantitate = other.cantitate;
         return *this;
     }
-    [[nodiscard]] std::string getNumeIngredient() const {return numeIngredient;}
-    [[nodiscard]] std::string getCantitate() const {return cantitate;}
+    [[nodiscard]] const std::string& getNumeIngredient() const {return numeIngredient;}
+    [[nodiscard]] const std::string& getCantitate() const {return cantitate;}
     ~Ingredient() {}
 };
 class Instructiune {
@@ -35,7 +35,7 @@ public:
         return *this;
     }
 
-    [[nodiscard]] std::string getPas() const {return pas;}
+    [[nodiscard]] const std::string& getPas() const {return pas;}
     ~Instructiune() {}
 };
 class Reteta {
@@ -79,7 +79,7 @@ public:
 
         return os;
     }
-    [[nodiscard]] std::string getnumeReteta() const {return numeReteta;}
+    [[nodiscard]] const std::string& getnumeReteta() const {return numeReteta;}
     ~Reteta() {}
 };
 class CarteBucate {
