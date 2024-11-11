@@ -1,5 +1,8 @@
 # Rețetar
-
+### Descriere
+Proiectul va simula un rețetar/o carte de bucate și poate fi de ajutor unui restaurant sau bunicii mele :)
+Programul permite adăugarea, modificarea și vizualizarea rețetelor, gestionarea ingredientelor și instrucțiunilor de gătire.
+Aplicația este ușor de folosit, cu un meniu intuitiv ce îți afișează toate opțiunile pe care le poți folosi într-un anumit moment.
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
 Codul generat pus "ca să fie"/pe care nu îl înțelegeți se punctează doar pentru puncte bonus, doar în contextul
@@ -16,7 +19,6 @@ O cerință nu se consideră îndeplinită dacă este realizată doar ca o serie
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
 - [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
-  - Proiectul va ajuta la gestionarea ingredientelor și la instrucțiunile de gătire.
 
 ## Tema 1
 
