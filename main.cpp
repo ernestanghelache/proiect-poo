@@ -31,8 +31,8 @@ public:
         return cantitate;
     }
     void setCantitate(int cantitate_){cantitate=cantitate_;}
-    [[nodiscard]] std::string getNumeIngredient() const {return numeIngredient;}
-    [[nodiscard]] std::string getUnitateMasura() const {return unitateMasura;}
+    [[nodiscard]] const std::string& getNumeIngredient() const {return numeIngredient;}
+    [[nodiscard]] const std::string& getUnitateMasura() const {return unitateMasura;}
     ~Ingredient() {}
 };
 class Stoc {
@@ -212,7 +212,6 @@ void exemple(CarteBucate &carte, Stoc &depozit) {
     depozit.addIngredientFull("Pesmet",20,"g");
 
 }
-int demo(CarteBucate &carte,Stoc &depozit);
 void case1(CarteBucate &carte, Stoc &depozit) {
     std::string numeReteta, numeIngredient, unitateMasura, instructiune;
     int nrIngrediente, nrInstructiuni, cantitate;
@@ -399,7 +398,7 @@ void case3(CarteBucate &carte, Stoc &depozit) {
             bool realizabil = true;
             const std::vector<Ingredient> ingredients = reteta->getIngrediente();
             for (const Ingredient& ingredient : ingredients) {
-                Ingredient* stoc = depozit.gasesteProdus(ingredient.getNumeIngredient());
+                const Ingredient* stoc = depozit.gasesteProdus(ingredient.getNumeIngredient());
                 if(stoc==nullptr) {
                     realizabil=false;
                 }else if (stoc->getCantitate() < ingredient.getCantitate()) {
@@ -431,7 +430,6 @@ void case3(CarteBucate &carte, Stoc &depozit) {
 }
 
 void case4(Stoc &depozit) {
-    std::string produs;
     std::cout<<depozit;
     std::cout<<"Doriti sa modificati un produs?\n1. Da\n2. Nu\n";
     int optiune;
@@ -443,6 +441,7 @@ void case4(Stoc &depozit) {
     }
     std::cin.ignore();
     if(optiune==1) {
+        std::string produs;
         std::cout<<"Ce produs doriti sa modificati?\n";
         std::getline(std::cin, produs);
         Ingredient* ingr=depozit.gasesteProdus(produs);
@@ -460,7 +459,7 @@ void case4(Stoc &depozit) {
     }
 
 }
-int demo(CarteBucate &carte, Stoc &depozit) {
+int sistem(CarteBucate &carte, Stoc &depozit) {
     int caz;
     while(true) {
         std::cout<<"Sistem de management al retetelor\n\n";
@@ -511,7 +510,7 @@ int main() {
     CarteBucate retetar;
     Stoc depozit;
     exemple(retetar,depozit);
-    demo(retetar,depozit);
+    sistem(retetar,depozit);
 
     return 0;
 }
