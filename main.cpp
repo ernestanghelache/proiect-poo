@@ -212,7 +212,7 @@ void exemple(CarteBucate &carte, Stoc &depozit) {
     depozit.addIngredientFull("Pesmet",20,"g");
 
 }
-void case1(CarteBucate &carte, Stoc &depozit) {
+void addReteta(CarteBucate &carte, Stoc &depozit) {
     std::string numeReteta, numeIngredient, unitateMasura, instructiune;
     int nrIngrediente, nrInstructiuni, cantitate;
     std::cin.ignore();
@@ -280,7 +280,7 @@ void case1(CarteBucate &carte, Stoc &depozit) {
     carte.adaugaReteta(nouaReteta);
     std::cout << "Reteta a fost adaugata cu succes!\n";
 }
-void case2(CarteBucate &carte, Stoc &depozit) {
+void modificaReteta(CarteBucate &carte, Stoc &depozit) {
     std::cout << carte;
     std::string numeReteta;
     std::cout << "Introduceti numele retetei pe care doriti sa o modificati: ";
@@ -367,7 +367,7 @@ void case2(CarteBucate &carte, Stoc &depozit) {
         }
     }
 }
-void case3(CarteBucate &carte, Stoc &depozit) {
+void afisRetete(CarteBucate &carte, Stoc &depozit) {
     std::cout << carte;
     std::cout << "\nDoriti sa vedeti o reteta?\n";
     std::cout << "1. Da\n";
@@ -377,7 +377,7 @@ void case3(CarteBucate &carte, Stoc &depozit) {
     std::cin.ignore();
 
 
-    while (caz < 1 || caz > 2) {
+    while (caz < 1 or caz > 2) {
         std::cout << "Optiune invalida. Introduceti o valoare:";
         std::cin >> caz;
         std::cin.ignore();
@@ -429,7 +429,7 @@ void case3(CarteBucate &carte, Stoc &depozit) {
     }
 }
 
-void case4(Stoc &depozit) {
+void afisStoc(Stoc &depozit) {
     std::cout<<depozit;
     std::cout<<"Doriti sa modificati un produs?\n1. Da\n2. Nu\n";
     int optiune;
@@ -477,22 +477,22 @@ int sistem(CarteBucate &carte, Stoc &depozit) {
         }
         switch(caz) {
             case 1: {
-                case1(carte,depozit);
+                addReteta(carte,depozit);
                 break;
             }
 
             case 2: {
-                case2(carte,depozit);
+                modificaReteta(carte,depozit);
                 break;
             }
 
 
             case 3: {
-                case3(carte,depozit);
+                afisRetete(carte,depozit);
                 break;
             }
             case 4: {
-                case4(depozit);
+                afisStoc(depozit);
                 break;
             }
             case 5: {
