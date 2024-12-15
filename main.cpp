@@ -44,10 +44,10 @@ public:
 
 class Stoc : public Ingredient{
     public:
-    static std::shared_ptr<Ingredient> gasesteProdus(const std::string &numeProdus, std::vector<Ingredient> &produse) {
+    static Ingredient* gasesteProdus(const std::string &numeProdus, std::vector<Ingredient> &produse) {
         for (Ingredient& it : produse) {
             if (it.getNume()==numeProdus) {
-                return std::shared_ptr<Ingredient>(&it);
+                return &it;
             }
         }
         return nullptr;
@@ -139,10 +139,10 @@ public:
         carte.emplace_back(reteta);
     }
 
-    static std::shared_ptr<Reteta> gasesteReteta(const std::string& numeReteta,std::vector<Reteta> &carte) {
+    static Reteta* gasesteReteta(const std::string& numeReteta,std::vector<Reteta> &carte) {
         for (Reteta& reteta : carte) {
             if (reteta.getnumeReteta() == numeReteta) {
-                return std::shared_ptr<Reteta>(&reteta);
+                return &reteta;
             }
         }
         return nullptr;
@@ -277,7 +277,7 @@ void modificaReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit
     std::cout << "Introduceti numele retetei pe care doriti sa o modificati: ";
     std::cin.ignore();
     std::getline(std::cin, numeReteta);
-    const std::shared_ptr<Reteta> reteta = CarteBucate::gasesteReteta(numeReteta,carte);
+    Reteta* reteta = CarteBucate::gasesteReteta(numeReteta,carte);
 
     if (reteta == nullptr) {
         std::cout << "Reteta nu a fost gasita.\n";
@@ -379,7 +379,7 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
         std::cout << "Ce reteta doriti sa vedeti?\n";
         std::getline(std::cin, nume);
 
-        std::shared_ptr<Reteta> reteta = CarteBucate::gasesteReteta(nume,carte);
+        Reteta* reteta = CarteBucate::gasesteReteta(nume,carte);
 
         if (reteta == nullptr) {
             std::cout << "Reteta nu a fost gasita.\n";
@@ -389,7 +389,7 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
             bool realizabil = true;
             const std::vector<Ingredient> ingredients = reteta->getIngrediente();
             for (const Ingredient& ingredient : ingredients) {
-                const std::shared_ptr<Ingredient> stoc = Stoc::gasesteProdus(ingredient.getNume(),depozit);
+                const Ingredient* stoc = Stoc::gasesteProdus(ingredient.getNume(),depozit);
                 if(stoc==nullptr) {
                     realizabil=false;
                 }else if (stoc->getCantitate() < ingredient.getCantitate()) {
@@ -435,7 +435,7 @@ void afisStoc(std::vector<Ingredient> &depozit) {
         std::string produs;
         std::cout<<"Ce produs doriti sa modificati?\n";
         std::getline(std::cin, produs);
-        std::shared_ptr<Ingredient> ingr=Stoc::gasesteProdus(produs,depozit);
+        Ingredient* ingr=Stoc::gasesteProdus(produs,depozit);
         while(ingr==nullptr) {
             std::cout<<"Optiune invalida.\n";
             std::cout<<"Ce produs doriti sa modificati?\n";
