@@ -510,5 +510,6 @@ int main() {
     std::vector<Stoc> depozit;
     exemple(retetar,depozit);
     sistem(retetar,depozit);
+    std::cout<<"proiect";
     return 0;
 }
