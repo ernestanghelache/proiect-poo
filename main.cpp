@@ -277,7 +277,7 @@ void modificaReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit
     std::cout << "Introduceti numele retetei pe care doriti sa o modificati: ";
     std::cin.ignore();
     std::getline(std::cin, numeReteta);
-    std::shared_ptr<Reteta> reteta = CarteBucate::gasesteReteta(numeReteta,carte);
+    const std::shared_ptr<Reteta> reteta = CarteBucate::gasesteReteta(numeReteta,carte);
 
     if (reteta == nullptr) {
         std::cout << "Reteta nu a fost gasita.\n";
