@@ -34,24 +34,16 @@ public:
     void modificareCantitate(int cantitate_) {
         cantitate = cantitate + cantitate_;
     }
-    virtual void inventar() {
-        int cant;
-        std::cout<<"buna ziua";
-    }
+
     void setCantitate(int cantitate_){cantitate=cantitate_;}
     [[nodiscard]] int getCantitate() const{return cantitate;}
     [[nodiscard]] const std::string& getNume() const {return nume;}
     [[nodiscard]] const std::string& getUnitateMasura() const {return unitateMasura;}
-    virtual ~Ingredient() {}
+    ~Ingredient() {}
 };
 
 class Stoc : public Ingredient{
     public:
-    virtual void inventar() {
-        int cant;
-        std::cin >> cant;
-        modificareCantitate(cant);
-    }
     static std::shared_ptr<Ingredient> gasesteProdus(const std::string &numeProdus, std::vector<Ingredient> &produse) {
         for (Ingredient& it : produse) {
             if (it.getNume()==numeProdus) {
