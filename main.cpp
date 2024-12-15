@@ -1,75 +1,73 @@
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
 
-class Ingredient {
-    std::string numeIngredient;
+class Ingredient{
+    std::string nume;
     int cantitate;
     std::string unitateMasura;
 public:
-    Ingredient() : numeIngredient{}, cantitate{}, unitateMasura{} {}
-    Ingredient(std::string& numeIngredient_, int cantitate_, std::string& unitateMasura_) : numeIngredient{std::move(numeIngredient_)}, cantitate{cantitate_}, unitateMasura{std::move(unitateMasura_)}{}
-    Ingredient(const Ingredient& other) : numeIngredient{other.numeIngredient}, cantitate{other.cantitate}, unitateMasura{other.unitateMasura}{}
+    Ingredient() : nume{}, cantitate{}, unitateMasura{} {}
+    Ingredient(std::string& nume_, int cantitate_, std::string& unitateMasura_) : nume{std::move(nume_)}, cantitate{cantitate_}, unitateMasura{std::move(unitateMasura_)}{}
+    Ingredient(const Ingredient& other) : nume{other.nume}, cantitate{other.cantitate}, unitateMasura{other.unitateMasura}{}
     Ingredient& operator=(const Ingredient& other) {
         if (this == &other) {
             return *this;
         }
-        numeIngredient = other.numeIngredient;
+        nume = other.nume;
         cantitate = other.cantitate;
         unitateMasura = other.unitateMasura;
         return *this;
     }
-    friend std::ostream& operator<<(std::ostream& os, const Ingredient& ingredient) {
-        os << ingredient.numeIngredient << ": " << ingredient.cantitate << ingredient.unitateMasura;
-
+    friend std::ostream& operator<<(std::ostream& os, const Ingredient& produs) {
+        os << produs.nume << ": " << produs.cantitate << produs.unitateMasura;
         return os;
     }
-    void modificareCantitate(int cantitate_) {
-        cantitate = cantitate + cantitate_;
-    }
-    [[nodiscard]] int getCantitate() const{
-        return cantitate;
-    }
-    void setCantitate(int cantitate_){cantitate=cantitate_;}
-    [[nodiscard]] const std::string& getNumeIngredient() const {return numeIngredient;}
-    [[nodiscard]] const std::string& getUnitateMasura() const {return unitateMasura;}
-    ~Ingredient() {}
-};
-class Stoc {
-    std::vector<Ingredient> produse;
-    public:
-    Stoc() : produse{} {}
-    explicit Stoc(const Ingredient &produse_) : produse{produse_} {}
-    Stoc(const Stoc& other) : produse{other.produse} {}
-    Stoc& operator=(const Stoc& other) {
-        if (this == &other) {
-            return *this;
-        }
-        produse = other.produse;
-        return *this;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const Stoc& stoc) {
-        for (const auto & it : stoc.produse)
+    friend std::ostream& operator<<(std::ostream& os, const std::vector<Ingredient>& stoc) {
+        for (const Ingredient &it : stoc)
             os << it << '\n';
 
         return os;
     }
-    Ingredient* gasesteProdus(const std::string& numeProdus) {
-        for (auto& it : produse) {
-            if (it.getNumeIngredient()==numeProdus) {
-                return &it;
+
+    void modificareCantitate(int cantitate_) {
+        cantitate = cantitate + cantitate_;
+    }
+    virtual void inventar() {
+        int cant;
+        std::cout<<"buna ziua";
+    }
+    void setCantitate(int cantitate_){cantitate=cantitate_;}
+    [[nodiscard]] int getCantitate() const{return cantitate;}
+    [[nodiscard]] const std::string& getNume() const {return nume;}
+    [[nodiscard]] const std::string& getUnitateMasura() const {return unitateMasura;}
+    virtual ~Ingredient() {}
+};
+
+class Stoc : public Ingredient{
+    public:
+    virtual void inventar() {
+        int cant;
+        std::cin >> cant;
+        modificareCantitate(cant);
+    }
+    static std::shared_ptr<Ingredient> gasesteProdus(const std::string &numeProdus, std::vector<Ingredient> &produse) {
+        for (Ingredient& it : produse) {
+            if (it.getNume()==numeProdus) {
+                return std::shared_ptr<Ingredient>(&it);
             }
         }
         return nullptr;
     }
-    void addIngredient(std::string num, std::string um) {
-        produse.emplace_back(num, 0, um);
+
+    static void addIngredient(std::string num, std::string um, std::vector<Ingredient>& produse) {
+        produse.emplace_back(num,0,um);
     }
-    void addIngredientFull(std::string num, int can, std::string um) {
+
+    static void addIngredientFull(std::string num, const int can, std::string um, std::vector<Ingredient>& produse) {
         produse.emplace_back(num,can,um);
     }
-    ~Stoc() {}
 };
 class Instructiune {
     std::string pas;
@@ -113,7 +111,7 @@ public:
     }
 
     void addIngredient(std::string num, int can, std::string um) {
-            ingrediente.emplace_back(num, can, um);
+        ingrediente.emplace_back(num, can, um);
     }
 
     void addInstructiune(std::string instruct) {
@@ -132,33 +130,34 @@ public:
 
         return os;
     }
-    [[nodiscard]] const std::string& getnumeReteta() const {return numeReteta;}
-    [[nodiscard]] const std::vector<Ingredient>& getIngrediente() const {return ingrediente;};
-    ~Reteta() {}
-};
-class CarteBucate {
-    std::vector<Reteta> retete;
-public:
-    void adaugaReteta(const Reteta& reteta) {
-        retete.push_back(reteta);
-    }
-    Reteta* gasesteReteta(const std::string& numeReteta) {
-        for (auto& reteta : retete) {
-            if (reteta.getnumeReteta() == numeReteta) {
-                return &reteta;
-            }
-        }
-        return nullptr;
-    }
-    friend std::ostream& operator<<(std::ostream& os, const CarteBucate& carte) {
+    friend std::ostream& operator<<(std::ostream& os, const std::vector<Reteta>& carte) {
         os << "Retete: \n";
-        for(const Reteta& reteta : carte.retete) {
+        for(const Reteta& reteta : carte) {
             os << "- " << reteta.getnumeReteta() << '\n';
         }
         return os;
     };
+    [[nodiscard]] const std::string& getnumeReteta() const {return numeReteta;}
+    [[nodiscard]] const std::vector<Ingredient>& getIngrediente() const {return ingrediente;};
+    ~Reteta() {}
 };
-void exemple(CarteBucate &carte, Stoc &depozit) {
+class CarteBucate : public Reteta{
+public:
+    static void adaugaReteta(Reteta &reteta, std::vector<Reteta>& carte) {
+        carte.emplace_back(reteta);
+    }
+
+    static std::shared_ptr<Reteta> gasesteReteta(const std::string& numeReteta,std::vector<Reteta> &carte) {
+        for (Reteta& reteta : carte) {
+            if (reteta.getnumeReteta() == numeReteta) {
+                return std::shared_ptr<Reteta>(&reteta);
+            }
+        }
+        return nullptr;
+    }
+
+};
+void exemple(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     Reteta clatite("Clatite");
     clatite.addIngredient("Ou",3,"buc");
     clatite.addIngredient("Lapte",250,"ml");
@@ -169,13 +168,13 @@ void exemple(CarteBucate &carte, Stoc &depozit) {
     clatite.addInstructiune("Punem compozitia cu polonicul in tigaie si o distribuim uniform.");
     clatite.addInstructiune("Dupa ce se rumeneste pe margini, o intoarcem pe cealalta parte si o mai lasam un minut.");
     clatite.addInstructiune("Scoatem clatita pe o farfurie si procedam la fel pana terminam compozitia.");
-    carte.adaugaReteta(clatite);
+    CarteBucate::adaugaReteta(clatite,carte);
 
-    depozit.addIngredientFull("Ou",10,"buc");
-    depozit.addIngredientFull("Lapte",1000,"ml");
-    depozit.addIngredientFull("Faina",1000,"g");
-    depozit.addIngredientFull("Apa minerala",3000,"ml");
-    depozit.addIngredientFull("Esenta de vanilie",50,"ml");
+    Stoc::addIngredientFull("Ou",10,"buc",depozit);
+    Stoc::addIngredientFull("Lapte",1000,"ml",depozit);
+    Stoc::addIngredientFull("Faina",1000,"g",depozit);
+    Stoc::addIngredientFull("Apa minerala",3000,"ml",depozit);
+    Stoc::addIngredientFull("Esenta de vanilie",50,"ml",depozit);
 
 
     Reteta paste("Paste");
@@ -188,13 +187,13 @@ void exemple(CarteBucate &carte, Stoc &depozit) {
     paste.addInstructiune("Intr-o tigaie se adauga uleiul de masline, usturoiul taiat cubulete si ardeiul iute taiat rondele.");
     paste.addInstructiune("Adaugam pastele in tigaie si le lasam 2 minute");
     paste.addInstructiune("Punem in farfurii si adaugam parmezanul ras.");
-    carte.adaugaReteta(paste);
+    CarteBucate::adaugaReteta(paste,carte);
 
-    depozit.addIngredientFull("Spaghete",750,"g");
-    depozit.addIngredientFull("Parmezan",500,"g");
-    depozit.addIngredientFull("Usturoi",40,"g");
-    depozit.addIngredientFull("Ardei iute",3,"buc");
-    depozit.addIngredientFull("Ulei de masline",750,"ml");
+    Stoc::addIngredientFull("Spaghete",750,"g",depozit);
+    Stoc::addIngredientFull("Parmezan",500,"g",depozit);
+    Stoc::addIngredientFull("Usturoi",40,"g",depozit);
+    Stoc::addIngredientFull("Ardei iute",3,"buc",depozit);
+    Stoc::addIngredientFull("Ulei de masline",750,"ml",depozit);
 
     Reteta chiftele("Chiftele");
     chiftele.addIngredient("Carne tocata",600,"g");
@@ -205,14 +204,14 @@ void exemple(CarteBucate &carte, Stoc &depozit) {
     chiftele.addInstructiune("Tocam marunt ceapa si usturoiul, apoi amestecam toate ingredientele intr-un bol si framantam bine.");
     chiftele.addInstructiune("Formam chiftelele rotunde si le prajim.");
     chiftele.addInstructiune("Scoatem chiftelele pe un servetel de hartie pentru a absorbi uleiul in exces.");
-    carte.adaugaReteta(chiftele);
+    CarteBucate::adaugaReteta(chiftele,carte);
 
-    depozit.addIngredientFull("Carne tocata",1000,"g");
-    depozit.addIngredientFull("Ceapa",300,"g");
-    depozit.addIngredientFull("Pesmet",20,"g");
+    Stoc::addIngredientFull("Carne tocata",1000,"g",depozit);
+    Stoc::addIngredientFull("Ceapa",300,"g",depozit);
+    Stoc::addIngredientFull("Pesmet",20,"g",depozit);
 
 }
-void addReteta(CarteBucate &carte, Stoc &depozit) {
+void addReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     std::string numeReteta, numeIngredient, unitateMasura, instructiune;
     int nrIngrediente, nrInstructiuni, cantitate;
     std::cin.ignore();
@@ -262,8 +261,8 @@ void addReteta(CarteBucate &carte, Stoc &depozit) {
         }
 
         nouaReteta.addIngredient(numeIngredient, cantitate, unitateMasura);
-        if(depozit.gasesteProdus(numeIngredient)==nullptr)
-            depozit.addIngredient(numeIngredient, unitateMasura);
+        if(Stoc::gasesteProdus(numeIngredient,depozit)==nullptr)
+            Stoc::addIngredient(numeIngredient, unitateMasura,depozit);
 
     }
 
@@ -277,16 +276,16 @@ void addReteta(CarteBucate &carte, Stoc &depozit) {
         nouaReteta.addInstructiune(instructiune);
     }
 
-    carte.adaugaReteta(nouaReteta);
+    CarteBucate::adaugaReteta(nouaReteta,carte);
     std::cout << "Reteta a fost adaugata cu succes!\n";
 }
-void modificaReteta(CarteBucate &carte, Stoc &depozit) {
+void modificaReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     std::cout << carte;
     std::string numeReteta;
     std::cout << "Introduceti numele retetei pe care doriti sa o modificati: ";
     std::cin.ignore();
     std::getline(std::cin, numeReteta);
-    Reteta* reteta = carte.gasesteReteta(numeReteta);
+    std::shared_ptr<Reteta> reteta = CarteBucate::gasesteReteta(numeReteta,carte);
 
     if (reteta == nullptr) {
         std::cout << "Reteta nu a fost gasita.\n";
@@ -343,8 +342,8 @@ void modificaReteta(CarteBucate &carte, Stoc &depozit) {
                     }
                 }
                 reteta->addIngredient(ingredient, cantitate, unitateMasura);
-                if(depozit.gasesteProdus(ingredient)==nullptr)
-                    depozit.addIngredient(ingredient,unitateMasura);
+                if(Stoc::gasesteProdus(ingredient,depozit)==nullptr)
+                    Stoc::addIngredient(ingredient,unitateMasura,depozit);
                 std::cout<<"Ingredientul a fost adaugat cu succes!\n";
             }
 
@@ -367,7 +366,7 @@ void modificaReteta(CarteBucate &carte, Stoc &depozit) {
         }
     }
 }
-void afisRetete(CarteBucate &carte, Stoc &depozit) {
+void afisRetete(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     std::cout << carte;
     std::cout << "\nDoriti sa vedeti o reteta?\n";
     std::cout << "1. Da\n";
@@ -388,21 +387,21 @@ void afisRetete(CarteBucate &carte, Stoc &depozit) {
         std::cout << "Ce reteta doriti sa vedeti?\n";
         std::getline(std::cin, nume);
 
-        const Reteta* reteta = carte.gasesteReteta(nume);
+        std::shared_ptr<Reteta> reteta = CarteBucate::gasesteReteta(nume,carte);
 
         if (reteta == nullptr) {
             std::cout << "Reteta nu a fost gasita.\n";
         } else {
-            std::cout << *reteta;
+            std::cout << reteta;
 
             bool realizabil = true;
             const std::vector<Ingredient> ingredients = reteta->getIngrediente();
             for (const Ingredient& ingredient : ingredients) {
-                const Ingredient* stoc = depozit.gasesteProdus(ingredient.getNumeIngredient());
+                const std::shared_ptr<Ingredient> stoc = Stoc::gasesteProdus(ingredient.getNume(),depozit);
                 if(stoc==nullptr) {
                     realizabil=false;
                 }else if (stoc->getCantitate() < ingredient.getCantitate()) {
-                    std::cout << "Mai aveti nevoie de " <<ingredient.getCantitate() - stoc->getCantitate() << ingredient.getUnitateMasura()<< ' '<<ingredient.getNumeIngredient() << " pentru a gati reteta.\n";
+                    std::cout << "Mai aveti nevoie de " <<ingredient.getCantitate() - stoc->getCantitate() << ingredient.getUnitateMasura()<< ' '<<ingredient.getNume() << " pentru a gati reteta.\n";
                     realizabil = false;
                 }
             }
@@ -420,7 +419,7 @@ void afisRetete(CarteBucate &carte, Stoc &depozit) {
 
                 if (optiune == 1) {
                     for (const auto& ingredient : ingredients) {
-                        depozit.gasesteProdus(ingredient.getNumeIngredient())->modificareCantitate(-ingredient.getCantitate());
+                        Stoc::gasesteProdus(ingredient.getNume(),depozit)->modificareCantitate(-ingredient.getCantitate());
                     }
                     std::cout << "Cantitatile au fost actualizate.\n";
                 }
@@ -429,7 +428,7 @@ void afisRetete(CarteBucate &carte, Stoc &depozit) {
     }
 }
 
-void afisStoc(Stoc &depozit) {
+void afisStoc(std::vector<Ingredient> &depozit) {
     std::cout<<depozit;
     std::cout<<"Doriti sa modificati un produs?\n1. Da\n2. Nu\n";
     int optiune;
@@ -444,14 +443,14 @@ void afisStoc(Stoc &depozit) {
         std::string produs;
         std::cout<<"Ce produs doriti sa modificati?\n";
         std::getline(std::cin, produs);
-        Ingredient* ingr=depozit.gasesteProdus(produs);
+        std::shared_ptr<Ingredient> ingr=Stoc::gasesteProdus(produs,depozit);
         while(ingr==nullptr) {
             std::cout<<"Optiune invalida.\n";
             std::cout<<"Ce produs doriti sa modificati?\n";
             std::getline(std::cin, produs);
-            ingr=depozit.gasesteProdus(produs);
+            ingr=Stoc::gasesteProdus(produs,depozit);
         }
-        std::cout<<"Introduceti noua cantitate pentru "<<ingr->getNumeIngredient()<<':';
+        std::cout<<"Introduceti noua cantitate pentru "<<ingr->getNume()<<':';
         int cantitate;
         std::cin>>cantitate;
         std::cin.ignore();
@@ -459,7 +458,7 @@ void afisStoc(Stoc &depozit) {
     }
 
 }
-int sistem(CarteBucate &carte, Stoc &depozit) {
+int sistem(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     int caz;
     while(true) {
         std::cout<<"Sistem de management al retetelor\n\n";
@@ -507,8 +506,8 @@ int sistem(CarteBucate &carte, Stoc &depozit) {
 }
 
 int main() {
-    CarteBucate retetar;
-    Stoc depozit;
+    std::vector<Reteta> retetar;
+    std::vector<Ingredient> depozit;
     exemple(retetar,depozit);
     sistem(retetar,depozit);
 
