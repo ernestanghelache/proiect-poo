@@ -379,7 +379,7 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
         std::cout << "Ce reteta doriti sa vedeti?\n";
         std::getline(std::cin, nume);
 
-        Reteta* reteta = CarteBucate::gasesteReteta(nume,carte);
+        const Reteta* reteta = CarteBucate::gasesteReteta(nume,carte);
 
         if (reteta == nullptr) {
             std::cout << "Reteta nu a fost gasita.\n";
