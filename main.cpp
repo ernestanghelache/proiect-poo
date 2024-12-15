@@ -5,7 +5,9 @@
 
 class Ingredient{
     std::string nume;
+protected:
     int cantitate;
+private:
     std::string unitateMasura;
 public:
     Ingredient() : nume{}, cantitate{}, unitateMasura{} {}
@@ -24,41 +26,44 @@ public:
         os << produs.nume << ": " << produs.cantitate << produs.unitateMasura;
         return os;
     }
-    friend std::ostream& operator<<(std::ostream& os, const std::vector<Ingredient>& stoc) {
-        for (const Ingredient &it : stoc)
-            os << it << '\n';
 
-        return os;
-    }
-
-    void modificareCantitate(int cantitate_) {
+    virtual void modificareCantitate(const int cantitate_) {
         cantitate = cantitate + cantitate_;
     }
 
-    void setCantitate(int cantitate_){cantitate=cantitate_;}
     [[nodiscard]] int getCantitate() const{return cantitate;}
     [[nodiscard]] const std::string& getNume() const {return nume;}
     [[nodiscard]] const std::string& getUnitateMasura() const {return unitateMasura;}
-    ~Ingredient() {}
+    virtual ~Ingredient() {}
 };
 
 class Stoc : public Ingredient{
+    using Ingredient::Ingredient;
     public:
-    static Ingredient* gasesteProdus(const std::string &numeProdus, std::vector<Ingredient> &produse) {
-        for (Ingredient& it : produse) {
+    static Stoc* gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &produse) {
+        for (Stoc& it : produse) {
             if (it.getNume()==numeProdus) {
                 return &it;
             }
         }
         return nullptr;
     }
-
-    static void addIngredient(std::string num, std::string um, std::vector<Ingredient>& produse) {
+    void modificareCantitate(const int cantitate_) override {
+        cantitate=cantitate_;
+    }
+    static void addIngredient(std::string num, std::string um, std::vector<Stoc>& produse) {
         produse.emplace_back(num,0,um);
     }
 
-    static void addIngredientFull(std::string num, const int can, std::string um, std::vector<Ingredient>& produse) {
+    static void addIngredientFull(std::string num, const int can, std::string um, std::vector<Stoc>& produse) {
         produse.emplace_back(num,can,um);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const std::vector<Stoc>& stoc) {
+        for (const Stoc &it : stoc)
+            os << it << '\n';
+
+        return os;
     }
 };
 class Instructiune {
@@ -87,8 +92,10 @@ class Reteta {
     std::vector<Instructiune> instructiuni;
 public:
     Reteta() : numeReteta{}, ingrediente{}, instructiuni{} {}
+
     explicit Reteta(std::string numeReteta_): numeReteta{std::move(numeReteta_)}{}
-    Reteta(std::string& numeReteta_, const std::vector<Ingredient>&ingrediente_, const std::vector<Instructiune>& instructiuni_) : numeReteta{std::move(numeReteta_)}, ingrediente{ingrediente_}, instructiuni{instructiuni_}{}
+
+    Reteta(std::string& numeReteta_, const std::vector<Ingredient> &ingrediente_, const std::vector<Instructiune> &instructiuni_) : numeReteta{std::move(numeReteta_)}, ingrediente{ingrediente_}, instructiuni{instructiuni_}{}
 
     Reteta(const Reteta& other) : numeReteta{other.numeReteta}, ingrediente{other.ingrediente}, instructiuni{other.instructiuni} {}
 
@@ -113,11 +120,11 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Reteta& reteta) {
         os << "Nume reteta: " << reteta.numeReteta << '\n';
         os << "Ingrediente:" << '\n';
-        for (const auto & it : reteta.ingrediente)
+        for (const Ingredient& it : reteta.ingrediente)
             os << it << '\n';
 
         os << "Instructiuni:\n";
-        for (const auto & it : reteta.instructiuni)
+        for (const Instructiune& it : reteta.instructiuni)
             os << "- " << it << '\n';
 
         return os;
@@ -149,7 +156,7 @@ public:
     }
 
 };
-void exemple(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
+void exemple(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     Reteta clatite("Clatite");
     clatite.addIngredient("Ou",3,"buc");
     clatite.addIngredient("Lapte",250,"ml");
@@ -203,7 +210,7 @@ void exemple(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     Stoc::addIngredientFull("Pesmet",20,"g",depozit);
 
 }
-void addReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
+void addReteta(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     std::string numeReteta, numeIngredient, unitateMasura, instructiune;
     int nrIngrediente, nrInstructiuni, cantitate;
     std::cin.ignore();
@@ -271,7 +278,7 @@ void addReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     CarteBucate::adaugaReteta(nouaReteta,carte);
     std::cout << "Reteta a fost adaugata cu succes!\n";
 }
-void modificaReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
+void modificaReteta(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     std::cout << carte;
     std::string numeReteta;
     std::cout << "Introduceti numele retetei pe care doriti sa o modificati: ";
@@ -358,7 +365,7 @@ void modificaReteta(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit
         }
     }
 }
-void afisRetete(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
+void afisRetete(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     std::cout << carte;
     std::cout << "\nDoriti sa vedeti o reteta?\n";
     std::cout << "1. Da\n";
@@ -410,7 +417,7 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
                 }
 
                 if (optiune == 1) {
-                    for (const auto& ingredient : ingredients) {
+                    for (const Ingredient& ingredient : ingredients) {
                         Stoc::gasesteProdus(ingredient.getNume(),depozit)->modificareCantitate(-ingredient.getCantitate());
                     }
                     std::cout << "Cantitatile au fost actualizate.\n";
@@ -420,7 +427,7 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
     }
 }
 
-void afisStoc(std::vector<Ingredient> &depozit) {
+void afisStoc(std::vector<Stoc> &depozit) {
     std::cout<<depozit;
     std::cout<<"Doriti sa modificati un produs?\n1. Da\n2. Nu\n";
     int optiune;
@@ -446,11 +453,12 @@ void afisStoc(std::vector<Ingredient> &depozit) {
         int cantitate;
         std::cin>>cantitate;
         std::cin.ignore();
-        ingr->setCantitate(cantitate);
+        auto* co = dynamic_cast<Stoc*>(ingr);
+        co->modificareCantitate(cantitate);
     }
 
 }
-int sistem(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
+int sistem(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     int caz;
     while(true) {
         std::cout<<"Sistem de management al retetelor\n\n";
@@ -499,9 +507,8 @@ int sistem(std::vector<Reteta> &carte, std::vector<Ingredient> &depozit) {
 
 int main() {
     std::vector<Reteta> retetar;
-    std::vector<Ingredient> depozit;
+    std::vector<Stoc> depozit;
     exemple(retetar,depozit);
     sistem(retetar,depozit);
-
     return 0;
 }
