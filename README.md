@@ -1,10 +1,9 @@
 # Rețetar
 ### Descriere
 Proiectul va simula un rețetar/o carte de bucate și poate fi de ajutor unui restaurant sau bunicii mele :)
-Programul permite adăugarea, modificarea și vizualizarea rețetelor, gestionarea ingredientelor și instrucțiunilor de gătire.
+Programul permite adăugarea, modificarea și vizualizarea rețetelor, gestionarea ingredientelor și instrucțiunilor de gătire, introducerea stocului curent, cât și crearea unei liste de ingrediente lipsă pentru o rețetă, astfel încât să știi ce trebuie să cumperi.
 Aplicația este ușor de folosit, cu un meniu intuitiv ce îți afișează toate opțiunile pe care le poți folosi într-un anumit moment.
 
-În urma feedbackului primit, am adăugat clasa Stoc, care permite atât introducerea stocului curent, cât și crearea unei liste de ingrediente lipsă pentru o rețetă, astfel încât să știi ce trebuie să cumperi
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.
 Codul generat pus "ca să fie"/pe care nu îl înțelegeți se punctează doar pentru puncte bonus, doar în contextul
