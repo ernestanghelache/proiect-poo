@@ -20,6 +20,7 @@ runs:
     #   with:
     #     path: |
     #       ${{ env.BUILD_DIR }}/_deps
+    #     key: cache-${{ matrix.cmake_generator }}-${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.asan_name }}-${{ env.BUILD_TYPE }}
 
     # NOTE: GH Actions does not allow updating the cache yet
     # Using the workaround found here: https://github.com/actions/cache/issues/171
@@ -63,15 +64,21 @@ runs:
       run: |
         PATH="$(pwd)/gcc/mingw64/bin:${PATH}"
         # because GH Actions does not properly prepend to $PATH and still chooses VM gcc
-    export CMAKE_GENERATOR=${{ matrix.cmake_generator }}
- -i ${GITHUB_WORKSPACE}/artifacts \
+        export CMAKE_GENERATOR=${{ matrix.cmake_generator }}
+        bash ./scripts/cmake.sh configure -s ${GITHUB_WORKSPACE} -b ${{ env.BUILD_DIR }} \
+          -t ${{ env.BUILD_TYPE }} \
+          -i ${GITHUB_WORKSPACE}/artifacts \
+          -c "-DPROJECT_WARNINGS_AS_ERRORS=${{ inputs.warnings_as_errors }} -DGITHUB_ACTIONS=${GITHUB_ACTIONS} ${{ inputs.custom_flags }}"
 
     - name: Configure CMake
       shell: bash
       if: ${{ !(runner.os == 'Windows' && matrix.cxx == 'g++') }}
       run: |
         export CMAKE_GENERATOR=${{ matrix.cmake_generator }}
- -i ${GITHUB_WORKSPACE}/artifacts \
+        bash ./scripts/cmake.sh configure -s ${GITHUB_WORKSPACE} -b ${{ env.BUILD_DIR }} \
+          -t ${{ env.BUILD_TYPE }} \
+          -i ${GITHUB_WORKSPACE}/artifacts \
+          -c "-DPROJECT_WARNINGS_AS_ERRORS=${{ inputs.warnings_as_errors }} -DGITHUB_ACTIONS=${GITHUB_ACTIONS} ${{ inputs.custom_flags }}"
 
 # https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 # https://github.com/GuillaumeFalourd/poc-github-actions/blob/main/.github/workflows/36-local-action.yml
