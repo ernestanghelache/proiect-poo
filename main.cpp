@@ -5,14 +5,7 @@
 #include "sources/reteta.h"
 #include "sources/cartebucate.h"
 #include "sources/stoc.h"
-class eroare : public std::runtime_error {
-    using std::runtime_error::runtime_error;
-};
-class eroare_intrare : public eroare {
-public:
-    explicit eroare_intrare(const std::string& mesaj) :
-        eroare("eroare intrare: " + mesaj) {}
-};
+#include "sources/check.h"
 
 void exemple(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     Reteta clatite("Clatite");

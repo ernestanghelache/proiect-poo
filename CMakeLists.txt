@@ -54,6 +54,7 @@ add_executable(${PROJECT_NAME}
         sources/instructiune.cpp
         sources/cartebucate.h
         sources/cartebucate.cpp
+        sources/check.cpp
 )
 
 include(cmake/CompilerFlags.cmake)

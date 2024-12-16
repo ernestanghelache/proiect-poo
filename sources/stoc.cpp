@@ -1,5 +1,5 @@
-#include "Stoc.h"
-
+#include "stoc.h"
+#include "check.h"
 Stoc* Stoc::gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &produse) {
     for (Stoc& it : produse) {
         if (it.getNume() == numeProdus) {
