@@ -13,13 +13,11 @@ configure() {
     SOURCE_DIR="."
     CMAKE_OPTS=()
 
-    while getopts ":b:c:e:g:i:s:" opt; do
+    while getopts ":b:c:g:i:s:t:" opt; do
       case "${opt}" in
         b) BUILD_DIR="${OPTARG}"
         ;;
-        c) BUILD_TYPE="${OPTARG}"
-        ;;
-        e) IFS=" " read -r -a CMAKE_OPTS <<< "${OPTARG}"
+        c) IFS=" " read -r -a CMAKE_OPTS <<< "${OPTARG}"
         ;;
         g) export CMAKE_GENERATOR="${OPTARG}"
         ;;
@@ -27,21 +25,22 @@ configure() {
         ;;
         s) SOURCE_DIR="${OPTARG}"
         ;;
+        t) BUILD_TYPE="${OPTARG}"
+        ;;
         *) printf "Unknown option %s; available options: \n\
             -b (build dir)\n\
-            -c (CMake config build type)\n\
-            -e (extra CMake options e.g. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON)\n\
+            -c (custom CMake options)\n\
             -g (generator)\n\
             -i (install dir prefix)\n\
-            -s (source dir)\n"\
-            "${opt}"
+            -s (source dir)\n\
+            -t (build type)\n" "${opt}"
           exit 1
         ;;
       esac
     done
 
-    cmake -B "${BUILD_DIR}" \
-          -S "${SOURCE_DIR}" \
+    cmake -S "${SOURCE_DIR}" \
+          -B "${BUILD_DIR}" \
           -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
           -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
           "${CMAKE_OPTS[@]}"
@@ -53,33 +52,28 @@ build() {
     BUILD_DIR="${DEFAULT_BUILD_DIR}"
     BUILD_TYPE="${DEFAULT_BUILD_TYPE}"
     NPROC=6
-    CMAKE_OPTS=()
 
-    while getopts ":b:c:e:j:" opt; do
+    while getopts ":b:h:j:t:" opt; do
       case "${opt}" in
         b) BUILD_DIR="${OPTARG}"
         ;;
-        c) BUILD_TYPE="${OPTARG}"
-        ;;
-        e) IFS=" " read -r -a CMAKE_OPTS <<< "${OPTARG}"
-        ;;
         j) NPROC="${OPTARG}"
         ;;
-        *) printf "Unknown option %s; available options: \n\
+        t) BUILD_TYPE="${OPTARG}"
+        ;;
+        h) printf "Unknown option %s; available options: \n\
             -b (build dir)\n\
-            -c (CMake config build type)\n\
-            -e (extra CMake options)\n\
-            -j (number of jobs for parallel build)\n"\
-            "${opt}"
+            -j (number of jobs for parallel build)\n\
+            -t (build type)\n" "${opt}"
           exit 1
         ;;
+        *)
+        ;;
       esac
+      shift $((OPTIND-1))
     done
 
-    cmake --build "${BUILD_DIR}" \
-          --config "${BUILD_TYPE}" \
-          -j "${NPROC}" \
-          "${CMAKE_OPTS[@]}"
+    cmake --build "${BUILD_DIR}" --config "${BUILD_TYPE}" -j "${NPROC}" "$@"
 }
 
 install() {
@@ -88,27 +82,25 @@ install() {
     BUILD_DIR="${DEFAULT_BUILD_DIR}"
     BUILD_TYPE="${DEFAULT_BUILD_TYPE}"
     INSTALL_DIR="${DEFAULT_INSTALL_DIR}"
-    while getopts ":b:c:i:" opt; do
+    while getopts ":b:i:t:" opt; do
       case "${opt}" in
         b) BUILD_DIR="${OPTARG}"
         ;;
-        c) BUILD_TYPE="${OPTARG}"
-        ;;
         i) INSTALL_DIR="${OPTARG}"
+        ;;
+        t) BUILD_TYPE="${OPTARG}"
         ;;
         *) printf "Unknown option %s; available options: \n\
             -b (build dir)\n\
-            -c (CMake config build type)\n\
-            -i (install dir prefix)\n"\
-            "${opt}"
+            -i (install dir prefix)\n\
+            -t (build type)\n" "${opt}"
           exit 1
         ;;
       esac
+      shift $((OPTIND-1))
     done
 
-    cmake --install "${BUILD_DIR}" \
-          --config "${BUILD_TYPE}" \
-          --prefix "${INSTALL_DIR}"
+    cmake --install "${BUILD_DIR}" --config "${BUILD_TYPE}" --prefix "${INSTALL_DIR}"
 }
 
 
@@ -131,3 +123,4 @@ case "$1" in
         install\n" "${opt}"
       exit 1
 esac
+
