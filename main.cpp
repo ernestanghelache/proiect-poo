@@ -314,10 +314,10 @@ int sistem(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
         std::cout<<"3. Vedeti retetele.\n";
         std::cout<<"4. Vedeti stocul.\n";
         std::cout<<"5. Inventar\n";
-        std::cout<<"5. Iesire.\n";
+        std::cout<<"6. Iesire.\n";
         std::cout<<"\nIntroduceti optiunea:\n";
         std::cin>>caz;
-        while(caz < 1 or caz > 5) {
+        while(caz < 1 or caz > 6) {
             std::cout<<"\nOptiune invalida. Introduceti o optiune:";
             std::cin>>caz;
             std::cin.ignore();
