@@ -27,8 +27,7 @@ runs:
     - name: Configure CMake
       uses: ./.github/actions/configure-cmake
       with:
-        custom_flags: '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON -GNinja'
-        cache_key: 'cache-clang-tidy'
+        custom_flags: '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
 
     - name: Clang-Tidy
       continue-on-error: true
