@@ -1,161 +1,10 @@
 #include <iostream>
-#include <memory>
 #include <string>
 #include <vector>
-
-class Ingredient{
-    std::string nume;
-protected:
-    int cantitate;
-private:
-    std::string unitateMasura;
-public:
-    Ingredient() : nume{}, cantitate{}, unitateMasura{} {}
-    Ingredient(std::string& nume_, int cantitate_, std::string& unitateMasura_) : nume{std::move(nume_)}, cantitate{cantitate_}, unitateMasura{std::move(unitateMasura_)}{}
-    Ingredient(const Ingredient& other) : nume{other.nume}, cantitate{other.cantitate}, unitateMasura{other.unitateMasura}{}
-    Ingredient& operator=(const Ingredient& other) {
-        if (this == &other) {
-            return *this;
-        }
-        nume = other.nume;
-        cantitate = other.cantitate;
-        unitateMasura = other.unitateMasura;
-        return *this;
-    }
-    friend std::ostream& operator<<(std::ostream& os, const Ingredient& produs) {
-        os << produs.nume << ": " << produs.cantitate << produs.unitateMasura;
-        return os;
-    }
-
-    virtual void modificareCantitate(const int cantitate_) {
-        cantitate = cantitate + cantitate_;
-    }
-
-    [[nodiscard]] int getCantitate() const{return cantitate;}
-    [[nodiscard]] const std::string& getNume() const {return nume;}
-    [[nodiscard]] const std::string& getUnitateMasura() const {return unitateMasura;}
-    virtual ~Ingredient() {}
-};
-
-class Stoc : public Ingredient{
-    using Ingredient::Ingredient;
-    public:
-    static Stoc* gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &produse) {
-        for (Stoc& it : produse) {
-            if (it.getNume()==numeProdus) {
-                return &it;
-            }
-        }
-        return nullptr;
-    }
-    void modificareCantitate(const int cantitate_) override {
-        cantitate=cantitate_;
-    }
-    static void addIngredient(std::string num, std::string um, std::vector<Stoc>& produse) {
-        produse.emplace_back(num,0,um);
-    }
-
-    static void addIngredientFull(std::string num, const int can, std::string um, std::vector<Stoc>& produse) {
-        produse.emplace_back(num,can,um);
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const std::vector<Stoc>& stoc) {
-        for (const Stoc &it : stoc)
-            os << it << '\n';
-
-        return os;
-    }
-};
-class Instructiune {
-    std::string pas;
-public:
-    Instructiune() : pas{} {}
-    explicit Instructiune(std::string& pas_) : pas{std::move(pas_)}{}
-    Instructiune(const Instructiune& other) : pas{other.pas}{}
-    Instructiune& operator=(const Instructiune& other) {
-        if (this == &other) {
-            return *this;
-        }
-        pas = other.pas;
-        return *this;
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const Instructiune& instructiune) {
-        os << instructiune.pas;
-        return os;
-    }
-    ~Instructiune() {}
-};
-class Reteta {
-    std::string numeReteta;
-    std::vector<Ingredient> ingrediente;
-    std::vector<Instructiune> instructiuni;
-public:
-    Reteta() : numeReteta{}, ingrediente{}, instructiuni{} {}
-
-    explicit Reteta(std::string numeReteta_): numeReteta{std::move(numeReteta_)}{}
-
-    Reteta(std::string& numeReteta_, const std::vector<Ingredient> &ingrediente_, const std::vector<Instructiune> &instructiuni_) : numeReteta{std::move(numeReteta_)}, ingrediente{ingrediente_}, instructiuni{instructiuni_}{}
-
-    Reteta(const Reteta& other) : numeReteta{other.numeReteta}, ingrediente{other.ingrediente}, instructiuni{other.instructiuni} {}
-
-    Reteta& operator=(const Reteta& other) {
-        if (this == &other) {
-            return *this;
-        }
-        numeReteta = other.numeReteta;
-        ingrediente= other.ingrediente;
-        instructiuni = other.instructiuni;
-        return *this;
-    }
-
-    void addIngredient(std::string num, int can, std::string um) {
-        ingrediente.emplace_back(num, can, um);
-    }
-
-    void addInstructiune(std::string instruct) {
-        instructiuni.emplace_back(instruct);
-    }
-
-    friend std::ostream& operator<<(std::ostream& os, const Reteta& reteta) {
-        os << "Nume reteta: " << reteta.numeReteta << '\n';
-        os << "Ingrediente:" << '\n';
-        for (const Ingredient& it : reteta.ingrediente)
-            os << it << '\n';
-
-        os << "Instructiuni:\n";
-        for (const Instructiune& it : reteta.instructiuni)
-            os << "- " << it << '\n';
-
-        return os;
-    }
-    friend std::ostream& operator<<(std::ostream& os, const std::vector<Reteta>& carte) {
-        os << "Retete: \n";
-        for(const Reteta& reteta : carte) {
-            os << "- " << reteta.getnumeReteta() << '\n';
-        }
-        return os;
-    };
-    [[nodiscard]] const std::string& getnumeReteta() const {return numeReteta;}
-    [[nodiscard]] const std::vector<Ingredient>& getIngrediente() const {return ingrediente;};
-    ~Reteta() {}
-};
-class CarteBucate : public Reteta{
-public:
-    static void adaugaReteta(Reteta &reteta, std::vector<Reteta>& carte) {
-        carte.emplace_back(reteta);
-    }
-
-    static Reteta* gasesteReteta(const std::string& numeReteta,std::vector<Reteta> &carte) {
-        for (Reteta& reteta : carte) {
-            if (reteta.getnumeReteta() == numeReteta) {
-                return &reteta;
-            }
-        }
-        return nullptr;
-    }
-
-};
+#include "sources/ingredient.h"
+#include "sources/reteta.h"
+#include "sources/cartebucate.h"
+#include "sources/stoc.h"
 class eroare : public std::runtime_error {
     using std::runtime_error::runtime_error;
 };
@@ -164,6 +13,7 @@ public:
     explicit eroare_intrare(const std::string& mesaj) :
         eroare("eroare intrare: " + mesaj) {}
 };
+
 void exemple(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     Reteta clatite("Clatite");
     clatite.addIngredient("Ou",3,"buc");
@@ -463,6 +313,7 @@ int sistem(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
         std::cout<<"2. Modificati o reteta.\n";
         std::cout<<"3. Vedeti retetele.\n";
         std::cout<<"4. Vedeti stocul.\n";
+        std::cout<<"5. Inventar\n";
         std::cout<<"5. Iesire.\n";
         std::cout<<"\nIntroduceti optiunea:\n";
         std::cin>>caz;
@@ -513,6 +364,14 @@ int sistem(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
                 break;
             }
             case 5: {
+                try {
+                    Stoc::inventar(depozit);
+                }
+                catch(eroare_intrare &err) {
+                    std::cout<<err.what()<<'\n';
+                }
+            }
+            case 6: {
                 return 0;
             }
             default: {
@@ -528,6 +387,5 @@ int main() {
     std::vector<Stoc> depozit;
     exemple(retetar,depozit);
     sistem(retetar,depozit);
-    std::cout<<"proiect";
     return 0;
 }
