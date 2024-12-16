@@ -370,6 +370,7 @@ int sistem(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
                 catch(eroare_intrare &err) {
                     std::cout<<err.what()<<'\n';
                 }
+                break;
             }
             case 6: {
                 return 0;
