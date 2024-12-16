@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Ingredient.h"
+#include "ingredient.h"
 
 class Stoc : public Ingredient {
     using Ingredient::Ingredient;

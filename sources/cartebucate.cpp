@@ -1,5 +1,5 @@
-#include "CarteBucate.h"
-#include "Reteta.h"
+#include "cartebucate.h"
+#include "reteta.h"
 
 void CarteBucate::adaugaReteta(Reteta &reteta, std::vector<Reteta>& carte) {
     carte.emplace_back(reteta);

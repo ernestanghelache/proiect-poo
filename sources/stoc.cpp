@@ -1,5 +1,5 @@
-#include "Stoc.h"
-#include "Ingredient.h"
+#include "stoc.h"
+#include "ingredient.h"
 
 Stoc* Stoc::gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &produse) {
     for (Stoc& it : produse) {

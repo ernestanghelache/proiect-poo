@@ -3,7 +3,7 @@
 #define CARTE_BUCATE_H
 
 #include <vector>
-#include "Reteta.h"
+#include "reteta.h"
 
 class CarteBucate : public Reteta {
 public:

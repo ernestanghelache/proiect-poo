@@ -1,4 +1,4 @@
-#include "Ingredient.h"
+#include "ingredient.h"
 
 Ingredient::Ingredient() : nume{}, cantitate{}, unitateMasura{} {}
 

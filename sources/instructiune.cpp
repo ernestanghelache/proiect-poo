@@ -1,4 +1,4 @@
-#include "Instructiune.h"
+#include "instructiune.h"
 
 Instructiune::Instructiune() : pas{} {}
 

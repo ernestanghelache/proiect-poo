@@ -1,4 +1,4 @@
-#include "Reteta.h"
+#include "reteta.h"
 
 Reteta::Reteta() : numeReteta{}, ingrediente{}, instructiuni{} {}
 

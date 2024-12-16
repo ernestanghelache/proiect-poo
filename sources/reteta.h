@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Ingredient.h"
-#include "Instructiune.h"
+#include "ingredient.h"
+#include "instructiune.h"
 
 class Reteta {
     std::string numeReteta;
