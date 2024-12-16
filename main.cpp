@@ -156,6 +156,14 @@ public:
     }
 
 };
+class eroare : public std::runtime_error {
+    using std::runtime_error::runtime_error;
+};
+class eroare_intrare : public eroare {
+public:
+    explicit eroare_intrare(const std::string& mesaj) :
+        eroare("eroare intrare: " + mesaj) {}
+};
 void exemple(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     Reteta clatite("Clatite");
     clatite.addIngredient("Ou",3,"buc");
@@ -235,10 +243,8 @@ void addReteta(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
         std::cout<<"3. buc\n";
         std::cin >> optiune;
         std::cin.ignore();
-        while(optiune < 1 or optiune > 3) {
-            std::cout<<"Optiune invalida.\n Introduceti o optiune:\n";
-            std::cin >> optiune;
-            std::cin.ignore();
+        if(optiune < 1 or optiune > 3) {
+            throw eroare_intrare("optiune invalida");
         }
         switch (optiune) {
             case 1:{
@@ -287,7 +293,7 @@ void modificaReteta(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     Reteta* reteta = CarteBucate::gasesteReteta(numeReteta,carte);
 
     if (reteta == nullptr) {
-        std::cout << "Reteta nu a fost gasita.\n";
+        throw eroare_intrare("reteta invalida");
     } else {
         int c;
         std::cout << "Ce doriti sa modificati?\n";
@@ -361,7 +367,7 @@ void modificaReteta(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
                 reteta->addInstructiune(instructiune);
             }
         } else {
-            std::cout << "Optiune invalida.\n";
+            throw eroare_intrare("optiune invalida");;
         }
     }
 }
@@ -375,10 +381,8 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
     std::cin.ignore();
 
 
-    while (caz < 1 or caz > 2) {
-        std::cout << "Optiune invalida. Introduceti o valoare:";
-        std::cin >> caz;
-        std::cin.ignore();
+    if (caz < 1 or caz > 2) {
+        throw eroare_intrare("optiune invalida");
     }
 
     if (caz == 1) {
@@ -389,18 +393,18 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
         const Reteta* reteta = CarteBucate::gasesteReteta(nume,carte);
 
         if (reteta == nullptr) {
-            std::cout << "Reteta nu a fost gasita.\n";
+            throw eroare_intrare("nume reteta invalid");
         } else {
-            std::cout << reteta;
+            std::cout << *reteta;
 
             bool realizabil = true;
             const std::vector<Ingredient> ingredients = reteta->getIngrediente();
             for (const Ingredient& ingredient : ingredients) {
-                const Ingredient* stoc = Stoc::gasesteProdus(ingredient.getNume(),depozit);
+                const Stoc* stoc = Stoc::gasesteProdus(ingredient.getNume(),depozit);
                 if(stoc==nullptr) {
                     realizabil=false;
                 }else if (stoc->getCantitate() < ingredient.getCantitate()) {
-                    std::cout << "Mai aveti nevoie de " <<ingredient.getCantitate() - stoc->getCantitate() << ingredient.getUnitateMasura()<< ' '<<ingredient.getNume() << " pentru a gati reteta.\n";
+                    std::cout << "Mai aveti nevoie de " << (ingredient.getCantitate() - stoc->getCantitate()) << stoc->getUnitateMasura() << ' '  << ingredient.getNume() << " pentru a gati reteta.\n";
                     realizabil = false;
                 }
             }
@@ -410,10 +414,8 @@ void afisRetete(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
                 int optiune;
                 std::cin >> optiune;
 
-                while (optiune < 1 or optiune > 2) {
-                    std::cout << "Optiune invalida. Introduceti o valoare:";
-                    std::cin >> optiune;
-                    std::cin.ignore();
+                if (optiune < 1 or optiune > 2) {
+                    throw eroare_intrare("optiune invalida");
                 }
 
                 if (optiune == 1) {
@@ -432,10 +434,8 @@ void afisStoc(std::vector<Stoc> &depozit) {
     std::cout<<"Doriti sa modificati un produs?\n1. Da\n2. Nu\n";
     int optiune;
     std::cin >> optiune;
-    while (optiune < 1 or optiune > 2) {
-        std::cout<<"\nOptiune invalida. Introduceti o optiune:";
-        std::cin.ignore();
-        std::cin >> optiune;
+    if (optiune < 1 or optiune > 2) {
+        throw eroare_intrare("optiune invalida");
     }
     std::cin.ignore();
     if(optiune==1) {
@@ -444,10 +444,7 @@ void afisStoc(std::vector<Stoc> &depozit) {
         std::getline(std::cin, produs);
         Ingredient* ingr=Stoc::gasesteProdus(produs,depozit);
         while(ingr==nullptr) {
-            std::cout<<"Optiune invalida.\n";
-            std::cout<<"Ce produs doriti sa modificati?\n";
-            std::getline(std::cin, produs);
-            ingr=Stoc::gasesteProdus(produs,depozit);
+            throw eroare_intrare("produs inexistent");
         }
         std::cout<<"Introduceti noua cantitate pentru "<<ingr->getNume()<<':';
         int cantitate;
@@ -476,22 +473,43 @@ int sistem(std::vector<Reteta> &carte, std::vector<Stoc> &depozit) {
         }
         switch(caz) {
             case 1: {
-                addReteta(carte,depozit);
+                try {
+                    addReteta(carte,depozit);
+                }
+                catch (eroare_intrare &err) {
+                    std::cout<<err.what();
+                }
                 break;
             }
 
             case 2: {
-                modificaReteta(carte,depozit);
+                try {
+                    modificaReteta(carte,depozit);
+                }
+                catch (eroare_intrare &err){
+                    std::cout<<err.what();
+                }
                 break;
             }
 
 
             case 3: {
-                afisRetete(carte,depozit);
+                try {
+                    afisRetete(carte,depozit);
+                }
+                catch(eroare_intrare &err){
+                    std::cout<<err.what()<<'\n';
+                }
+
                 break;
             }
             case 4: {
-                afisStoc(depozit);
+                try {
+                    afisStoc(depozit);
+                }
+                catch(eroare_intrare &err) {
+                    std::cout<<err.what()<<'\n';
+                }
                 break;
             }
             case 5: {
