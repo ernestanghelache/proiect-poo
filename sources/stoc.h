@@ -12,7 +12,8 @@ class Stoc : public Ingredient {
 public:
     static Stoc* gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &produse);
     void modificareCantitate(int cantitate_) override;
-    void inventar(std::vector<Stoc> &produs);
+
+    static void inventar(std::vector<Stoc> &produs);
     static void addIngredient(std::string num, std::string um, std::vector<Stoc>& produse);
     static void addIngredientFull(std::string num, int can, std::string um, std::vector<Stoc>& produse);
 
