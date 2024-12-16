@@ -1,5 +1,4 @@
-#include "stoc.h"
-#include "ingredient.h"
+#include "Stoc.h"
 
 Stoc* Stoc::gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &produse) {
     for (Stoc& it : produse) {
@@ -19,7 +18,7 @@ void Stoc::inventar(std::vector<Stoc> &produs) {
     int caz;
     std::cin >> caz;
     if (caz < 1 or caz > 2) {
-        throw std::runtime_error("optiune invalida");
+        throw eroare_intrare("optiune invalida");
     }
     int cantitate_;
     for (Stoc& it : produs) {
@@ -40,5 +39,6 @@ void Stoc::addIngredientFull(std::string num, const int can, std::string um, std
 std::ostream& operator<<(std::ostream& os, const std::vector<Stoc>& stoc) {
     for (const Stoc &it : stoc)
         os << it << '\n';
+
     return os;
 }
