@@ -44,7 +44,7 @@ void sistem(CarteBucate& carte, Stoc& stoc) {
                         std::cout << "Nume ingredient: ";
                         std::getline(std::cin, nume);
 
-                        if (auto* produs = dynamic_cast<Ingredient*>(stoc.gasesteProdus(nume))) {
+                        if (const auto* produs = dynamic_cast<Ingredient*>(stoc.gasesteProdus(nume))) {
                             unitate = produs->getUnitateMasura();
                             valoareNutritiva = produs->getValoareNutritiva();
                             std::cout << "Ingredientul \"" << nume << "\" există deja în stoc cu următoarele detalii:\n";
@@ -290,7 +290,7 @@ void exemple(CarteBucate& carte, Stoc& stoc) {
     stoc.adaugaIngredient(Ingredient("ceapa", 500, "g", 4));
     stoc.adaugaIngredient(Ingredient("pesmet", 40, "g", 2));
 
-    Reteta chiftele("Chiftele");
+    Reteta chiftele("chiftele");
     chiftele.addIngredient(Ingredient("carne tocata",600,"g",6));
     chiftele.addIngredient(Ingredient("ou",2,"buc",72));
     chiftele.addIngredient(Ingredient("ceapa",100,"g",4));

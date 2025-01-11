@@ -29,21 +29,6 @@ void Reteta::addInstructiune(const std::string& instructiune) {
     instructiuni.push_back(instructiune);
 }
 
-bool Reteta::validareIngrediente(const std::vector<std::unique_ptr<AbstractIngredient>>& stoc) const {
-    for (const auto& ingredient : ingrediente) {
-        bool found = false;
-        for (const auto& produs : stoc) {
-            if (produs->getNumeIngredient() == ingredient->getNumeIngredient() &&
-                produs->getCantitate() >= ingredient->getCantitate()) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) return false;
-    }
-    return true;
-}
-
 double Reteta::calculValoareNutritiva() const {
     double total = 0;
     for (const auto& ingredient : ingrediente) {

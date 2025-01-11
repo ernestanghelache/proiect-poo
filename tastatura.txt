@@ -1,32 +1,30 @@
 1
-Fries
+fries
 2
-Cartofi
-350
+cartofi
 1
-Ulei
+4
+350
+ulei
+3
+5
 500
-2
 3
 Se taie cartofii, iar uleiul se toarna intr-o tigaie la foc mare.
 Cand uleiul s-a incalzit se pun cartofii in tigaie si se lasa 6-7 minute.
-Se scot cartofii pe o farfurie si se presara sarea.
+Se scot cartofii pe o farfurie si se servesc.
 2
-Fries
-1
-1
-Sare
-15
-1
+7
+chiftele
 3
-1
-Paste
+chiftele
 4
-1
-Usturoi
-100
-3
-1
-Paste
-1
+5
+pesmet
+150
+5
+usturoi
+200
 6
+chiftele
+8

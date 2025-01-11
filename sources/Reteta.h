@@ -22,7 +22,6 @@ public:
     void addIngredient(const AbstractIngredient& ingredient);
     void addInstructiune(const std::string& instructiune);
 
-    [[nodiscard]] bool validareIngrediente(const std::vector<std::unique_ptr<AbstractIngredient>>& stoc) const;
     [[nodiscard]] double calculValoareNutritiva() const;
 
     [[nodiscard]] const std::string& getNumeReteta() const;
