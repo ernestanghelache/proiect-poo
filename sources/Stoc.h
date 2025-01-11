@@ -14,7 +14,7 @@ public:
     void adaugaIngredient(const AbstractIngredient& ingredient);
     [[nodiscard]] AbstractIngredient *gasesteProdus(const std::string &numeProdus) const;
 
-    [[nodiscard]] const std::vector<std::unique_ptr<AbstractIngredient>>& getProduse() const;
+    friend std::ostream& operator<<(std::ostream& os, const Stoc& stoc);
 };
 
 #endif

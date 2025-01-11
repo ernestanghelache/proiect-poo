@@ -15,10 +15,6 @@ AbstractIngredient* Stoc::gasesteProdus(const std::string& numeProdus) const {
     return nullptr;
 }
 
-const std::vector<std::unique_ptr<AbstractIngredient>>& Stoc::getProduse() const {
-    return produse;
-}
-
 std::ostream& operator<<(std::ostream& os, const Stoc& stoc) {
     os << "Stocul curent:\n";
     for (const auto& produs : stoc.produse) {
