@@ -45,16 +45,15 @@ include(cmake/Options.cmake)
 add_executable(${PROJECT_NAME}
     main.cpp
     generated/src/Helper.cpp
-        sources/reteta.h
-        sources/reteta.cpp
-        sources/instructiune.h
-        sources/stoc.h
-        sources/stoc.cpp
-        sources/ingredient.cpp
-        sources/instructiune.cpp
-        sources/cartebucate.h
-        sources/cartebucate.cpp
-        sources/check.cpp
+        sources/AbstractIngredient.h
+        sources/Reteta.h
+        sources/Reteta.cpp
+        sources/Stoc.h
+        sources/Stoc.cpp
+        sources/Ingredient.cpp
+        sources/CarteBucate.h
+        sources/CarteBucate.cpp
+        sources/Exceptii.h
 )
 
 include(cmake/CompilerFlags.cmake)
