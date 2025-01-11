@@ -35,9 +35,7 @@ void sistem(CarteBucate& carte, Stoc& stoc) {
                     int nrIngrediente;
                     std::cout << "Cate ingrediente are reteta? ";
                     std::cin >> nrIngrediente;
-                    std::cin.ignore();
-
-                    for (int i = 0; i < nrIngrediente; ++i) {
+                    std::cin.ignore();for (int i = 0; i < nrIngrediente; ++i) {
                         std::string nume;
                         int cantitate;
                         std::string unitate;
@@ -46,36 +44,46 @@ void sistem(CarteBucate& carte, Stoc& stoc) {
                         std::cout << "Nume ingredient: ";
                         std::getline(std::cin, nume);
 
-                        std::cout << "Cantitate: ";
-                        std::cin >> cantitate;
+                        if (auto* produs = dynamic_cast<Ingredient*>(stoc.gasesteProdus(nume))) {
+                            unitate = produs->getUnitateMasura();
+                            valoareNutritiva = produs->getValoareNutritiva();
+                            std::cout << "Ingredientul \"" << nume << "\" există deja în stoc cu următoarele detalii:\n";
+                            std::cout << "- Unitatea de masura: " << unitate << "\n";
+                            std::cout << "- Valoarea nutritiva: " << valoareNutritiva << "\n";
+                        } else {
+                            int optiuneUnitate;
+                            std::cout << "Selectati unitatea de masura:\n";
+                            std::cout << "1. buc\n2. g\n3. ml\n";
+                            std::cin >> optiuneUnitate;
+                            std::cin.ignore();
 
-                        int optiuneUnitate;
-                        std::cout << "Selectati unitatea de masura:\n";
-                        std::cout << "1. buc\n2. g\n3. ml\n";
-                        std::cin >> optiuneUnitate;
-                        std::cin.ignore();
+                            switch (optiuneUnitate) {
+                                case 1: unitate = "buc"; break;
+                                case 2: unitate = "g"; break;
+                                case 3: unitate = "ml"; break;
+                                default: unitate = ""; break;
+                            }
 
-                        switch (optiuneUnitate) {
-                            case 1: unitate = "buc"; break;
-                            case 2: unitate = "g"; break;
-                            case 3: unitate = "ml"; break;
-                            default: unitate = ""; break;
-                        }
+                            std::cout << "Valoare nutritiva (per unitate): ";
+                            std::cin >> valoareNutritiva;
+                            std::cin.ignore();
 
-                        std::cout << "Valoare nutritiva (per unitate): ";
-                        std::cin >> valoareNutritiva;
-                        std::cin.ignore();
+                            if (valoareNutritiva < 0) {
+                                throw IngredientException("Valoarea nutritiva nu poate fi negativa.");
+                            }
 
-                        if (cantitate < 0 || valoareNutritiva < 0) {
-                            throw IngredientException("Cantitatea sau valoarea nutritiva nu poate fi negativa.");
-                        }
-
-                        Ingredient ingredient(nume, cantitate, unitate, valoareNutritiva);
-                        reteta.addIngredient(ingredient);
-
-                        if (!stoc.gasesteProdus(nume)) {
                             stoc.adaugaIngredient(Ingredient(nume, 0, unitate, valoareNutritiva));
                         }
+
+                        std::cout << "Cantitate: ";
+                        std::cin >> cantitate;
+                        std::cin.ignore();
+
+                        if (cantitate < 0) {
+                            throw IngredientException("Cantitatea nu poate fi negativa.");
+                        }
+
+                        reteta.addIngredient(Ingredient(nume, cantitate, unitate, valoareNutritiva));
                     }
 
                     int nrInstructiuni;
@@ -101,6 +109,7 @@ void sistem(CarteBucate& carte, Stoc& stoc) {
                 }
                 break;
             }
+
             case 2: {
                 try {
                     std::cout << "Retete disponibile:\n";
@@ -209,8 +218,6 @@ void sistem(CarteBucate& carte, Stoc& stoc) {
             }
             case 7: { // Calcul valoare nutritiva
                 try {
-                    std::cin.ignore();
-
                     std::string nume;
                     std::cout << "Introduceti numele retetei: ";
                     std::getline(std::cin, nume);
