@@ -1,36 +1,26 @@
 #ifndef INGREDIENT_H
 #define INGREDIENT_H
 
-#include "AbstractIngredient.h"
-#include "Exceptii.h"
-#include <iostream>
+#include "Produs.h"
 #include <string>
+#include <iostream>
 
-class Ingredient : public AbstractIngredient {
-    std::string numeIngredient;
-    int cantitate;
-    std::string unitateMasura;
-    double valoareNutritiva;
+class Ingredient final : public Produs {
+    int calorii;
 
 public:
-
     Ingredient();
-    Ingredient(const std::string& numeIngredient_, int cantitate_, const std::string& unitateMasura_, double valoareNutritiva_);
 
-    void afisare() const override;
-    [[nodiscard]] AbstractIngredient* clone() const override;
-    void modificareCantitate(int cantitate_) override;
+    Ingredient(const std::string &numeIngredient_, int cantitate_, const std::string &unitateMasura_,
+               int calorii_);
 
-    [[nodiscard]] int getCantitate() const override;
-    [[nodiscard]] const std::string& getNumeIngredient() const override;
-    [[nodiscard]] const std::string& getUnitateMasura() const override;
-    [[nodiscard]] double getValoareNutritiva() const override;
+    Ingredient &operator=(const Ingredient &other);
 
-    void setCantitate(int cantitate_);
+    friend std::ostream &operator<<(std::ostream &os, const Ingredient &ingredient);
 
-    friend std::ostream& operator<<(std::ostream& os, const Ingredient& ingredient);
+    [[nodiscard]] bool recomandat() const override;
 
-    ~Ingredient() override;
+    ~Ingredient() override = default;
 };
 
 #endif

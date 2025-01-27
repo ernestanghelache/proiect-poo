@@ -1,36 +1,48 @@
 #ifndef RETETA_H
 #define RETETA_H
 
-#include "Ingredient.h"
-#include <vector>
-#include <memory>
 #include <string>
+#include <vector>
+#include <iostream>
+#include "Ingredient.h"
+#include "Instructiune.h"
 
 class Reteta {
+protected:
     std::string numeReteta;
-    std::vector<std::unique_ptr<AbstractIngredient>> ingrediente;
-    std::vector<std::string> instructiuni;
-
-    static int contorRetete;
+    std::vector<Ingredient> ingrediente;
+    std::vector<Instructiune> instructiuni;
+    bool vegan;
 
 public:
+    static int nr;
+
     Reteta();
-    explicit Reteta(const std::string& numeReteta_);
-    Reteta(const Reteta& other);
-    Reteta& operator=(const Reteta& other);
 
-    void addIngredient(const AbstractIngredient& ingredient);
-    void addInstructiune(const std::string& instructiune);
+    explicit Reteta(std::string numeReteta_);
 
-    [[nodiscard]] double calculValoareNutritiva() const;
+    Reteta(std::string &numeReteta_, const std::vector<Ingredient> &ingrediente_,
+           const std::vector<Instructiune> &instructiuni_, bool vegan_);
 
-    [[nodiscard]] const std::string& getNumeReteta() const;
+    Reteta(const Reteta &other) = default;
 
-    static int getContorRetete();
-    [[nodiscard]] const std::vector<std::unique_ptr<AbstractIngredient>>& getIngrediente() const;
-    friend std::ostream& operator<<(std::ostream& os, const Reteta& reteta);
-    ~Reteta();
+    Reteta &operator=(const Reteta &other);
+
+    void addIngredient(const std::string &num, int can, const std::string &um, int cal);
+
+    void addInstructiune(std::string instruct);
+
+    friend std::ostream &operator<<(std::ostream &os, const Reteta &reteta);
+
+    void setVegan(bool vegan_);
+
+    [[nodiscard]] const std::string &getnumeReteta() const;
+
+    [[nodiscard]] const std::vector<Ingredient> &getIngrediente() const;
+
+    virtual unsigned long long int estimaretimp() = 0;
+
+    virtual ~Reteta() = default;
 };
 
 #endif
-

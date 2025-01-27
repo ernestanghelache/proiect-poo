@@ -1,65 +1,30 @@
 #include "Ingredient.h"
 
-Ingredient::Ingredient() : numeIngredient{}, cantitate{0}, unitateMasura{}, valoareNutritiva{0.0} {}
+Ingredient::Ingredient() : calorii{} {
+}
 
-Ingredient::Ingredient(const std::string& numeIngredient_, int cantitate_, const std::string& unitateMasura_, double valoareNutritiva_) {
-    if (cantitate_ < 0) {
-        throw IngredientException("Cantitatea nu poate fi negativa: " + std::to_string(cantitate_));
+Ingredient::Ingredient(const std::string &numeIngredient_, const int cantitate_, const std::string &unitateMasura_,
+                       const int calorii_)
+    : Produs(numeIngredient_, cantitate_, unitateMasura_), calorii(calorii_) {
+}
+
+Ingredient &Ingredient::operator=(const Ingredient &other) {
+    if (this == &other) {
+        return *this;
     }
-    if (valoareNutritiva_ < 0) {
-        throw IngredientException("Valoarea nutritiva nu poate fi negativa: " + std::to_string(valoareNutritiva_));
-    }
-
-    numeIngredient = numeIngredient_;
-    cantitate = cantitate_;
-    unitateMasura = unitateMasura_;
-    valoareNutritiva = valoareNutritiva_;
+    numeIngredient = other.numeIngredient;
+    cantitate = other.cantitate;
+    calorii = other.calorii;
+    unitateMasura = other.unitateMasura;
+    return *this;
 }
 
-void Ingredient::afisare() const {
-    std::cout << numeIngredient << ": " << cantitate << unitateMasura
-              << " (Valoare nutritiva: " << valoareNutritiva << " per unitate)\n";
-}
-
-AbstractIngredient* Ingredient::clone() const {
-    return new Ingredient(*this);
-}
-
-void Ingredient::modificareCantitate(int cantitate_) {
-    cantitate += cantitate_;
-    if (cantitate < 0) {
-        throw IngredientException("Cantitatea dupa modificare nu poate fi negativa.");
-    }
-}
-
-int Ingredient::getCantitate() const {
-    return cantitate;
-}
-
-const std::string& Ingredient::getNumeIngredient() const {
-    return numeIngredient;
-}
-
-const std::string& Ingredient::getUnitateMasura() const {
-    return unitateMasura;
-}
-
-double Ingredient::getValoareNutritiva() const {
-    return valoareNutritiva;
-}
-
-void Ingredient::setCantitate(int cantitate_) {
-    if (cantitate_ < 0) {
-        throw IngredientException("Cantitatea setata nu poate fi negativa.");
-    }
-    cantitate = cantitate_;
-}
-
-std::ostream& operator<<(std::ostream& os, const Ingredient& ingredient) {
-    os << ingredient.numeIngredient << ": " << ingredient.cantitate << ingredient.unitateMasura
-       << " (Valoare nutritiva: " << ingredient.valoareNutritiva << " per unitate)";
+std::ostream &operator<<(std::ostream &os, const Ingredient &ingredient) {
+    os << ingredient.numeIngredient << ": " << ingredient.cantitate << ingredient.unitateMasura << "; "
+            << ingredient.calorii * ingredient.cantitate << " calorii";
     return os;
 }
 
-Ingredient::~Ingredient() = default;
-
+bool Ingredient::recomandat() const {
+    return calorii <= 50;
+}

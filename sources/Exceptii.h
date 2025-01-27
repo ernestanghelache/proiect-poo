@@ -3,29 +3,38 @@
 
 #include <exception>
 #include <string>
-#include <utility>
 
-class RetetaException : public std::exception {
+class eroare : public std::exception {
+protected:
     std::string mesaj;
 
 public:
-    explicit RetetaException(std::string  mesaj_) : mesaj(std::move(mesaj_)) {}
+    [[nodiscard]] const char *what() const noexcept override;
 
-    [[nodiscard]] const char* what() const noexcept override {
-        return mesaj.c_str();
-    }
+    eroare();
+
+    explicit eroare(std::string mesaj);
+
+    ~eroare() override = default;
 };
 
-class IngredientException final : public std::exception {
-    std::string mesaj;
-
+class eroare_reteta final : public eroare {
 public:
-    explicit IngredientException(std::string  mesaj_) : mesaj(std::move(mesaj_)) {}
+    explicit eroare_reteta(const std::string &mesaj);
 
-    [[nodiscard]] const char* what() const noexcept override {
-        return mesaj.c_str();
-    }
+    ~eroare_reteta() override = default;
+};
+
+class eroare_stoc final : public eroare {
+public:
+    explicit eroare_stoc(const std::string &mesaj);
+
+    ~eroare_stoc() override = default;
+};
+
+class eroare_intrare final : public eroare {
+public:
+    explicit eroare_intrare(const std::string &mesaj);
 };
 
 #endif
-

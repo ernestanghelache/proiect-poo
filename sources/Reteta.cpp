@@ -1,77 +1,58 @@
 #include "Reteta.h"
 
-Reteta::Reteta(const Reteta& other) : numeReteta(other.numeReteta) {
-    for (const auto& ingredient : other.ingrediente) {
-        ingrediente.emplace_back(ingredient->clone());
-    }
-    instructiuni = other.instructiuni;
+Reteta::Reteta() : vegan{false} {
 }
 
-Reteta& Reteta::operator=(const Reteta& other) {
-    if (this == &other) return *this;
+Reteta::Reteta(std::string numeReteta_) : numeReteta{std::move(numeReteta_)}, vegan{false} {
+    nr++;
+}
 
-    numeReteta = other.numeReteta;
+Reteta::Reteta(std::string &numeReteta_, const std::vector<Ingredient> &ingrediente_,
+               const std::vector<Instructiune> &instructiuni_, bool vegan_)
+    : numeReteta{std::move(numeReteta_)}, ingrediente{ingrediente_}, instructiuni{instructiuni_}, vegan{vegan_} {
+    nr++;
+}
 
-    ingrediente.clear();
-    for (const auto& ingredient : other.ingrediente) {
-        ingrediente.emplace_back(ingredient->clone());
+Reteta &Reteta::operator=(const Reteta &other) {
+    if (this == &other) {
+        return *this;
     }
-
+    numeReteta = other.numeReteta;
+    ingrediente = other.ingrediente;
     instructiuni = other.instructiuni;
-
     return *this;
 }
 
-void Reteta::addIngredient(const AbstractIngredient& ingredient) {
-    ingrediente.emplace_back(ingredient.clone());
-}
-void Reteta::addInstructiune(const std::string& instructiune) {
-    instructiuni.push_back(instructiune);
+void Reteta::addIngredient(const std::string &num, int can, const std::string &um, int cal) {
+    ingrediente.emplace_back(num, can, um, cal);
 }
 
-double Reteta::calculValoareNutritiva() const {
-    double total = 0;
-    for (const auto& ingredient : ingrediente) {
-        total += ingredient->getValoareNutritiva() * ingredient->getCantitate();
-    }
-    return total;
+void Reteta::addInstructiune(std::string instruct) {
+    instructiuni.emplace_back(instruct);
 }
 
-const std::string& Reteta::getNumeReteta() const {
-    return numeReteta;
-}
+std::ostream &operator<<(std::ostream &os, const Reteta &reteta) {
+    os << "Nume reteta: " << reteta.numeReteta << '\n';
+    os << (reteta.vegan ? "Este vegana." : "Nu este vegana.") << '\n';
+    os << "Ingrediente:" << '\n';
+    for (const Ingredient &it: reteta.ingrediente)
+        os << it << '\n';
 
-std::ostream& operator<<(std::ostream& os, const Reteta& reteta) {
-    os << "Reteta: " << reteta.numeReteta << "\nIngrediente:\n";
-    for (const auto& ingredient : reteta.ingrediente) {
-        ingredient->afisare(); // Apelăm metoda virtuală `afisare`
-    }
     os << "Instructiuni:\n";
-    for (const auto& instructiune : reteta.instructiuni) {
-        os << "- " << instructiune << "\n";
-    }
+    for (const Instructiune &it: reteta.instructiuni)
+        os << "- " << it << '\n';
+
     return os;
 }
 
-int Reteta::contorRetete = 0;
-
-Reteta::Reteta() : numeReteta{}, ingrediente{}, instructiuni{} {
-    ++contorRetete;
+void Reteta::setVegan(const bool vegan_) {
+    vegan = vegan_;
 }
 
-Reteta::Reteta(const std::string& numeReteta_) : numeReteta(numeReteta_), ingrediente{}, instructiuni{} {
-    if (numeReteta_.empty()) {
-        throw RetetaException("Numele retetei nu poate fi gol.");
-    }
+const std::string &Reteta::getnumeReteta() const {
+    return numeReteta;
 }
-const std::vector<std::unique_ptr<AbstractIngredient>>& Reteta::getIngrediente() const {
+
+const std::vector<Ingredient> &Reteta::getIngrediente() const {
     return ingrediente;
-}
-
-Reteta::~Reteta() {
-    --contorRetete;
-}
-
-int Reteta::getContorRetete() {
-    return contorRetete;
 }

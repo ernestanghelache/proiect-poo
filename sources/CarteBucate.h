@@ -1,18 +1,28 @@
-#ifndef CARTEBUCATE_H
-#define CARTEBUCATE_H
+#ifndef CARTE_BUCATE_H
+#define CARTE_BUCATE_H
 
-#include "Reteta.h"
 #include <vector>
+#include <memory>
+#include <string>
+#include "Reteta.h"
 
 class CarteBucate {
-    std::vector<Reteta> retete;
+    std::vector<std::unique_ptr<Reteta> > retete;
+
+    CarteBucate() = default;
 
 public:
-    void adaugaReteta(const Reteta& reteta);
-    Reteta* gasesteReteta(const std::string& numeReteta);
+    CarteBucate(const CarteBucate &) = delete;
 
-    friend std::ostream& operator<<(std::ostream& os, const CarteBucate& carte);
+    CarteBucate &operator=(const CarteBucate &) = delete;
+
+    static CarteBucate &getInstance();
+
+    void adaugaReteta(std::unique_ptr<Reteta> reteta);
+
+    [[nodiscard]] Reteta *gasesteReteta(const std::string &numeReteta) const;
+
+    friend std::ostream &operator<<(std::ostream &os, const CarteBucate &carte);
 };
 
 #endif
-
