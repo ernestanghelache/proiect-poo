@@ -1,7 +1,7 @@
 # Rețetar
 ### Descriere
 Proiectul va simula un rețetar/o carte de bucate și poate fi de ajutor unui restaurant sau bunicii mele :)
-Programul permite adăugarea, modificarea și vizualizarea rețetelor, gestionarea ingredientelor și instrucțiunilor de gătire, introducerea stocului curent, cât și crearea unei liste de ingrediente lipsă pentru o rețetă, astfel încât să știi ce trebuie să cumperi.
+Programul permite adăugarea, modificarea și vizualizarea rețetelor, gestionarea ingredientelor și instrucțiunilor de gătire, introducerea stocului curent, cât și crearea unei liste de ingrediente lipsă pentru o rețetă, astfel încât să știi ce trebuie să cumperi. Acesta determină dacă o rețetă este recomandată sau nuîn funcție de numărul de calorii și perioada de valabilitate a ingredientelor, estimează timpul necesar gătirii și poate încadra rețeta în categoria vegană.
 Aplicația este ușor de folosit, cu un meniu intuitiv ce îți afișează toate opțiunile pe care le poți folosi într-un anumit moment.
 
 ### Important!
