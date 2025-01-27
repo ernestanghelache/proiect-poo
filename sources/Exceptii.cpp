@@ -1,4 +1,4 @@
-#include "exceptii.h"
+#include "Exceptii.h"
 
 const char *eroare::what() const noexcept {
     return mesaj.c_str();
