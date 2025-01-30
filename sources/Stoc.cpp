@@ -29,16 +29,6 @@ Stoc *Stoc::gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &prod
     return nullptr;
 }
 
-int Stoc::getAn() const {
-    return an_expirare;
-}
-
-void Stoc::setExpirare(const int zi, const int luna, const int an) {
-    zi_expirare = zi;
-    luna_expirare = luna;
-    an_expirare = an;
-}
-
 void Stoc::addIngredient(std::string &num, std::string &um, std::vector<Stoc> &produse) {
     produse.emplace_back(num, 0, um);
 }

@@ -70,12 +70,12 @@ void Reteta::modificare(std::vector<Stoc> &depozit) {
         throw eroare_intrare("Eroare la alegerea modificarii ");
     }
     if (c == 1) {
-        int nr;
+        int nmr;
         std::cout << "Cate ingrediente doriti sa adaugati? ";
-        std::cin >> nr;
+        std::cin >> nmr;
         std::cin.ignore();
 
-        for (int i = 0; i < nr; ++i) {
+        for (int i = 0; i < nmr; ++i) {
             std::string ingredient, unitateMasura;
             int cantitate;
             std::cout << "Introduceti numele ingredientului " << i + 1 << ": ";

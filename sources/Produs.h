@@ -20,8 +20,6 @@ public:
 
     [[nodiscard]] int getCantitate() const;
 
-    void setCantitate(int cantitate_);
-
     [[nodiscard]] const std::string &getNumeIngredient() const;
 
     [[nodiscard]] const std::string &getUnitateMasura() const;

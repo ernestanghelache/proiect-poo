@@ -18,11 +18,6 @@ int Produs::getCantitate() const {
 }
 
 
-void Produs::setCantitate(const int cantitate_) {
-    cantitate = cantitate_;
-}
-
-
 const std::string &Produs::getNumeIngredient() const {
     return numeIngredient;
 }

@@ -23,10 +23,6 @@ public:
 
     static Stoc *gasesteProdus(const std::string &numeProdus, std::vector<Stoc> &produse);
 
-    [[nodiscard]] int getAn() const;
-
-    void setExpirare(int zi, int luna, int an);
-
     static void addIngredient(std::string &num, std::string &um, std::vector<Stoc> &produse);
 
     static void addIngredientFull(const std::string &num, int can, const std::string &um, int z, int l, int a,
