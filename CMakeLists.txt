@@ -57,6 +57,8 @@ add_executable(${PROJECT_NAME}
         sources/RetetaMancare.h
         sources/RetetaDesert.cpp
         sources/RetetaDesert.h
+        sources/RetetaBautura.cpp
+        sources/RetetaBautura.h
         sources/Meniu.h
         sources/Meniu.cpp
         sources/Stoc.h
