@@ -1,5 +1,7 @@
 #include "Stoc.h"
 
+#include "Exceptii.h"
+
 Stoc::Stoc() : zi_expirare(0), luna_expirare(0), an_expirare(0) {
 }
 
@@ -68,4 +70,67 @@ bool Stoc::expirat() const {
 
 bool Stoc::recomandat() const {
     return !expirat();
+}
+
+void Stoc::verificareData() {
+    int zi, luna, an;
+    if (an_expirare == 0) {
+        std::cout << *this << "\nProdusul are data expirarii neinitializata. Introduceti data expirarii.\nZiua: ";
+        std::cin >> zi;
+        std::cout << "\nLuna: ";
+        std::cin >> luna;
+        std::cout << "\nAnul: ";
+        std::cin >> an;
+        if (zi > 31 or an < 2025 or luna > 12)
+            throw eroare_stoc("Data invalida");
+        zi_expirare = zi;
+        luna_expirare = luna;
+        an_expirare = an;
+        std::cout << "Data a fost modificata.\n";
+    }
+    if (expirat() == true) {
+        std::cout << *this << "\nProdusul a expirat. Introduceti noua data a expirarii.\nZiua: ";
+        std::cin >> zi;
+        std::cout << "\nLuna: ";
+        std::cin >> luna;
+        std::cout << "\nAnul: ";
+        std::cin >> an;
+        if (zi > 31 or an < 2025 or luna > 12)
+            throw eroare_stoc("Data invalida");
+        zi_expirare = zi;
+        luna_expirare = luna;
+        an_expirare = an;
+        cantitate = 0;
+        std::cout << "Data a fost modificata si produsele expirate sterse.\n";
+    }
+}
+
+void Stoc::modificare() {
+    int opt;
+    std::cout << "Ce doriti sa modificati?\n1. Cantitatea\n2. Data expirarii\nIntroduceti optiunea: ";
+    std::cin >> opt;
+    if (opt != 1 and opt != 2) {
+        throw eroare_intrare("Optiune invalida.");
+    }
+    if (opt == 1) {
+        std::cout << "Introduceti noua cantitate pentru " << numeIngredient << ':';
+        int cant;
+        std::cin >> cant;
+        std::cin.ignore();
+        cantitate = cant;
+    } else if (opt == 2) {
+        int zi, luna, an;
+        std::cout << "\nIntroduceti data expirarii.\nZiua: ";
+        std::cin >> zi;
+        std::cout << "\nLuna: ";
+        std::cin >> luna;
+        std::cout << "\nAnul: ";
+        std::cin >> an;
+        if (zi > 31 or an < 2025 or luna > 12)
+            throw eroare_stoc("Data invalida");
+        zi_expirare = zi;
+        luna_expirare = luna;
+        an_expirare = an;
+        std::cout << "Data a fost modificata";
+    }
 }

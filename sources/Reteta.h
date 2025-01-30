@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Ingredient.h"
 #include "Instructiune.h"
+#include "Stoc.h"
 
 class Reteta {
 protected:
@@ -39,6 +40,8 @@ public:
     [[nodiscard]] const std::string &getnumeReteta() const;
 
     [[nodiscard]] const std::vector<Ingredient> &getIngrediente() const;
+
+    void modificare(std::vector<Stoc> &depozit);
 
     virtual unsigned long long int estimaretimp() = 0;
 

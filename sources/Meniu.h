@@ -13,11 +13,7 @@ class Meniu {
 
     void exemple();
 
-    void addReteta();
-
     void modificaReteta();
-
-    void afisRetete();
 
     void afisStoc();
 

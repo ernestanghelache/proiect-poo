@@ -37,6 +37,10 @@ public:
     [[nodiscard]] bool recomandat() const override;
 
     ~Stoc() override = default;
+
+    void verificareData();
+
+    void modificare();
 };
 
 #endif

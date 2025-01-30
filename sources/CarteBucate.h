@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include "Reteta.h"
+#include "Stoc.h"
 
 class CarteBucate {
     std::vector<std::unique_ptr<Reteta> > retete;
@@ -23,6 +24,10 @@ public:
     [[nodiscard]] Reteta *gasesteReteta(const std::string &numeReteta) const;
 
     friend std::ostream &operator<<(std::ostream &os, const CarteBucate &carte);
+
+    void addReteta(std::vector<Stoc> &depozit);
+
+    void afisRetete(std::vector<Stoc> &depozit) const;
 };
 
 #endif
