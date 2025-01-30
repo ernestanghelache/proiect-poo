@@ -120,6 +120,7 @@ void Meniu::afisStoc() {
     for (Stoc &it: depozit) {
         it.verificareData();
     }
+    std::cout<<"Stoc disponibil:\n";
     for (const Stoc &i: depozit)
         std::cout << i;
     std::cout << "Doriti sa modificati un produs?\n1. Da\n2. Nu\nIntroduceti o optiune: ";

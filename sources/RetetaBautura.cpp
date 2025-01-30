@@ -1,15 +1,15 @@
 #include "RetetaBautura.h"
 
-RetetaBautura::RetetaBautura() : Reteta(), alcoolic(false) {
+RetetaBautura::RetetaBautura() : Reteta(), fierbere(false) {
 }
 
-RetetaBautura::RetetaBautura(std::string numeReteta_) : Reteta(std::move(numeReteta_)), alcoolic(false) {
+RetetaBautura::RetetaBautura(std::string numeReteta_) : Reteta(std::move(numeReteta_)), fierbere(false) {
 }
 
-void RetetaBautura::setAlcoolic(const bool alcoolic_) {
-    alcoolic = alcoolic_;
+void RetetaBautura::setFierbere(const bool fierbere_) {
+    fierbere = fierbere_;
 }
 
 unsigned long long RetetaBautura::estimaretimp() {
-    return instructiuni.size() * 2;
+    return instructiuni.size() * 2 + fierbere*10;
 }

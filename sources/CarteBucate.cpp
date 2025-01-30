@@ -123,7 +123,7 @@ void CarteBucate::addReteta(std::vector<Stoc> &depozit) {
         std::cout << "Pentru aceasta reteta este nevoie de coacere?\n0. Nu\n1. Da\n Introduceti optiunea: ";
     }
     if (tip == 3) {
-        std::cout << "Aceasta reteta contine alcool?\n0. Nu\n1. Da\n Introduceti optiunea: ";
+        std::cout << "Pentru aceasta reteta este nevoie de fierbere?\n0. Nu\n1. Da\n Introduceti optiunea: ";
     }
     bool opt;
     std::cin >> opt;
@@ -132,7 +132,7 @@ void CarteBucate::addReteta(std::vector<Stoc> &depozit) {
     } else if (auto *retetaDesert = dynamic_cast<RetetaDesert *>(nouaReteta.get())) {
         retetaDesert->setCoacere(opt);
     } else if (auto *retetaBautura = dynamic_cast<RetetaBautura *>(nouaReteta.get())) {
-        retetaBautura->setAlcoolic(opt);
+        retetaBautura->setFierbere(opt);
     }
 
     adaugaReteta(std::move(nouaReteta));

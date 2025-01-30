@@ -5,14 +5,14 @@
 #include <string>
 
 class RetetaBautura final : public Reteta {
-    bool alcoolic;
+    bool fierbere;
 
 public:
     RetetaBautura();
 
     explicit RetetaBautura(std::string numeReteta_);
 
-    void setAlcoolic(bool alcoolic_);
+    void setFierbere(bool fierbere_);
 
     unsigned long long estimaretimp() override;
 
